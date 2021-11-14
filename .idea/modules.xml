@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/application-app/application-app.iml" filepath="$PROJECT_DIR$/application-app/application-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/application-component/application-component.iml" filepath="$PROJECT_DIR$/application-component/application-component.iml" />
+      <module fileurl="file://$PROJECT_DIR$/application-domain/application-domain.iml" filepath="$PROJECT_DIR$/application-domain/application-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/application-infrasturcture/application-infrasturcture.iml" filepath="$PROJECT_DIR$/application-infrasturcture/application-infrasturcture.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lecture-application-design.iml" filepath="$PROJECT_DIR$/lecture-application-design.iml" />
+      <module fileurl="file://$PROJECT_DIR$/start/start.iml" filepath="$PROJECT_DIR$/start/start.iml" />
+    </modules>
+  </component>
+</project>
