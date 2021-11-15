@@ -19,11 +19,6 @@
     <dependencies>
         <dependency>
             <groupId>com.lecture</groupId>
-            <artifactId>application-app</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lecture</groupId>
             <artifactId>application-component</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

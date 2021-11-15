@@ -33,7 +33,7 @@
         </dependency>
         <dependency>
             <groupId>com.lecture</groupId>
-            <artifactId>application-infrasturcture</artifactId>
+            <artifactId>application-infrastructure</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>

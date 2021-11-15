@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>application-infrasturcture</module>
+        <module>application-infrastructure</module>
         <module>application-component</module>
         <module>application-domain</module>
         <module>application-app</module>
