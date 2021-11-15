@@ -1,21 +1,17 @@
 package com.lecture.service;
 
+import com.lecture.gateway.RedisGateway;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 /**
- * @className: StudentService
+ * @className: CourseService
  * @description: TODO
  * @author: carl
- * @date: 2021/11/15 18:39
+ * @date: 2021/11/16 0:14
  */
 @Service
-public class StudentService {
-
+public class CourseService {
     @Autowired
-    private RedisTemplate redisTemplate;
-
-
-
+    private RedisGateway redisGateway;
 }
