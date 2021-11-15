@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://112.74.126.4:3306/lecture
+    username: readonly
+    password: readonly
+
+  redis:
+    host: 112.74.126.4
+    port: 6379
+    lettuce:
+      pool:
+        max-active: 4
+        max-wait: -1
+        max-idle: 4
+        min-idle: 0
+
+#Redis自定义缓存时间配置，单位为秒
+caching:
+  ttl-map:
+    skuInfo: 10
