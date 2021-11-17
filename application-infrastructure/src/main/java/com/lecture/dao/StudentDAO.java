@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lecture.eneities.StudentDO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @className: StudentDAO
  * @description: TODO
@@ -12,4 +14,12 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface StudentDAO extends BaseMapper<StudentDO> {
+
+    /**
+     * 根据学生学号，查询该学生所选的所有课程
+     *
+     * @param stuId 学生学号
+     * @return 课程id列表
+     */
+    List<Integer> getLessonIdsByStuId(Long stuId);
 }
