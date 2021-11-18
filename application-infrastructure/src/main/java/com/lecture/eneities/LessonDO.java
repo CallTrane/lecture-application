@@ -1,5 +1,8 @@
 package com.lecture.eneities;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -8,12 +11,14 @@ import lombok.Data;
  * @author: carl
  * @date: 2021/11/17 1:58
  */
+@TableName("lesson")
 @Data
 public class LessonDO {
 
     /**
      * 课程id
      */
+    @TableId(value = "l_id", type = IdType.AUTO)
     private Integer lId;
 
     /**

@@ -1,5 +1,8 @@
 package com.lecture.eneities;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -8,6 +11,7 @@ import lombok.Data;
  * @author: carl
  * @date: 2021/11/17 11:49
  */
+@TableName("teacher")
 @Data
 public class TeacherDO {
 
@@ -19,6 +23,7 @@ public class TeacherDO {
     /**
      * 教师工号
      */
+    @TableId(value = "t_id", type = IdType.AUTO)
     private Long tId;
 
     /**

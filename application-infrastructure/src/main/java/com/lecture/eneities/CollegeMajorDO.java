@@ -1,5 +1,7 @@
 package com.lecture.eneities;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -8,12 +10,14 @@ import lombok.Data;
  * @author: carl
  * @date: 2021/11/17 12:01
  */
+@TableName("college_major")
 @Data
 public class CollegeMajorDO {
 
     /**
      * 学院id
      */
+    @TableId(value = "college_id")
     private Integer collegeId;
 
     /**
