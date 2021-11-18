@@ -2,6 +2,8 @@ package com.lecture.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @className: LessonVO
  * @description: 课程信息
@@ -11,9 +13,9 @@ import lombok.Data;
 @Data
 public class LessonVO {
     /**
-     * 校区
+     * 校区名字
      */
-    private String campus;
+    private String campusName;
 
     /**
      * 课程名
@@ -31,7 +33,12 @@ public class LessonVO {
     private String classes;
 
     /**
-     * 教师名字
+     * 教师信息
      */
-    private String teacherName;
+    private TeacherVO teacherVO;
+
+    /**
+     * 学生信息
+     */
+    private List<StudentVO> studentVOs;
 }

@@ -12,15 +12,11 @@ import java.util.List;
  */
 @Data
 public class StudentLessonVO {
-    /**
-     * 学生学号
-     */
-    private Long studentId;
 
     /**
-     * 学生名字
+     * 学生信息
      */
-    private String studentName;
+    private StudentVO studentVO;
 
     /**
      * 课程信息
