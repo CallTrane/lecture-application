@@ -21,7 +21,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>lecture-application-design</name>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <!-- log4j -->

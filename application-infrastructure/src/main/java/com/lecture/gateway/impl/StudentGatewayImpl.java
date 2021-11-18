@@ -18,6 +18,7 @@ public class StudentGatewayImpl implements StudentGateway {
     @Autowired
     StudentDAO studentDAO;
 
+    @Override
     public Optional<List<Integer>> getLessonIdsByStuId(Long stuId) {
         return Optional.ofNullable(studentDAO.getLessonIdsByStuId(stuId));
     }
