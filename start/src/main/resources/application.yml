@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://112.74.126.4:3306/lecture
-    username: readonly
-    password: readonly
+    url: jdbc:mysql://112.74.126.4:3306/test
+    username: root
+    password: root
 
   redis:
     host: 112.74.126.4
