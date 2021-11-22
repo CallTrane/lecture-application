@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <login/>
-    <!-- <router-view/> -->
+    <router-view />
   </div>
 </template>
 
@@ -11,8 +10,8 @@ import Login from "views/login/Login";
 export default {
   name: "APP",
   components: {
-    Login
-  }
+    Login,
+  },
 };
 </script>
 

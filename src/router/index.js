@@ -4,13 +4,26 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const Home = () => import('views/Home')
+const Desktop = () => import('views/desktop/Desktop')
+const Login = () => import('views/login/Login')
 
 const routes = [
   {
     path: '/',
+    redirect: '/Login',
     name: 'Home',
     component: Home
   },
+  {
+    path: '/deskTop',
+    name: 'deskTop',
+    component: Desktop
+  },
+  {
+    path: '/Login',
+    name: 'login',
+    component: Login
+  }
 
 ]
 

@@ -1,12 +1,11 @@
-<template>
-  <div class="">
-  
-  </div>
-</template>
+<template></template>
 
 <script>
+import Login from "views/login/Login";
 export default {
   name: "",
-  components: {}
+  components: {
+    Login,
+  },
 };
 </script>
