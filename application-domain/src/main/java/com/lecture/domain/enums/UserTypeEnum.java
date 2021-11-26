@@ -1,12 +1,10 @@
 package com.lecture.domain.enums;
 
-import com.lecture.component.exception.SystemException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 

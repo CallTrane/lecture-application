@@ -36,9 +36,8 @@ public class SystemController {
         return ActionEnum.SUCCESS;
     }
 
-    @GetMapping("/login")
-    public ActionEnum userLogin(@Validated String account, @Validated String password) {
-        userApplicationService.login(account, password);
-        return ActionEnum.SUCCESS;
+    @PostMapping("/login")
+    public UserDO userLogin(@Validated String account, @Validated String password) {
+        return userApplicationService.login(account, password);
     }
 }
