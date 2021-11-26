@@ -1,10 +1,10 @@
 package com.lecture.domain.aggregates.userAggregate;
 
 import com.lecture.component.utils.BeanUtils;
-import com.lecture.domain.eneities.StudentDO;
-import com.lecture.domain.eneities.TeacherDO;
 
-import com.lecture.domain.eneities.UserDO;
+import com.lecture.domain.entities.StudentDO;
+import com.lecture.domain.entities.TeacherDO;
+import com.lecture.domain.entities.UserDO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

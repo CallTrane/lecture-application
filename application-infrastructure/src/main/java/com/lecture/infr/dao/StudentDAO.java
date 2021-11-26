@@ -1,7 +1,7 @@
 package com.lecture.infr.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lecture.domain.eneities.StudentDO;
+import com.lecture.domain.entities.StudentDO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

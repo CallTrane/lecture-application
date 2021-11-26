@@ -1,7 +1,7 @@
 package com.lecture.infr.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lecture.domain.eneities.CollegeMajorDO;
+import com.lecture.domain.entities.CollegeMajorDO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

@@ -1,4 +1,7 @@
 spring:
+  application:
+    name: lecture
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://112.74.126.4:3306/test
@@ -19,3 +22,19 @@ spring:
 caching:
   ttl-map:
     skuInfo: 10
+
+mybatis:
+  mapper-locations: classpath*:/mybatis/*.xml
+  type-aliases-package: com.lecture.domain.entities
+  configuration:
+    map-underscore-to-camel-case: true
+mybatis-plus:
+  mapper-locations: classpath*:/mybatis/*.xml
+  type-aliases-package: com.lecture.domain.entities
+#  config-location:
+server:
+  error:
+    include-exception: false
+    include-message: always
+
+

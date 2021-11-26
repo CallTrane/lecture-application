@@ -3,9 +3,9 @@ package com.lecture.app.assembler;
 import com.lecture.app.dto.UserRegisterDTO;
 import com.lecture.component.exception.SystemException;
 import com.lecture.domain.aggregates.userAggregate.UserAggregate;
-import com.lecture.domain.eneities.StudentDO;
-import com.lecture.domain.eneities.TeacherDO;
-import com.lecture.domain.eneities.UserDO;
+import com.lecture.domain.entities.StudentDO;
+import com.lecture.domain.entities.TeacherDO;
+import com.lecture.domain.entities.UserDO;
 import com.lecture.domain.enums.UserTypeEnum;
 
 import java.util.Objects;

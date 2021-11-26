@@ -1,8 +1,8 @@
 package com.lecture.infr.gateway.impl;
 
-import com.lecture.domain.eneities.StudentDO;
-import com.lecture.domain.eneities.TeacherDO;
-import com.lecture.domain.eneities.UserDO;
+import com.lecture.domain.entities.StudentDO;
+import com.lecture.domain.entities.TeacherDO;
+import com.lecture.domain.entities.UserDO;
 import com.lecture.infr.dao.StudentDAO;
 import com.lecture.infr.dao.TeacherDAO;
 import com.lecture.infr.dao.UserDAO;
@@ -47,5 +47,10 @@ public class UserGatewayImpl implements UserGateway {
     private Integer registerUser(UserDO userDO) {
         userDAO.insert(userDO);
         return userDO.getUid();
+    }
+
+    @Override
+    public UserDO userLogin(String account, String password) {
+        return userDAO.userLogin(account, password);
     }
 }

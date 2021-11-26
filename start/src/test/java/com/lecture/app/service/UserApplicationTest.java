@@ -2,6 +2,7 @@ package com.lecture.app.service;
 
 import com.lecture.app.dto.UserRegisterDTO;
 import com.lecture.StartApplicationTest;
+import com.lecture.domain.entities.UserDO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,15 +22,21 @@ public class UserApplicationTest extends StartApplicationTest {
     public void testRegister() {
         UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
         userRegisterDTO.setType(1);
-        userRegisterDTO.setAccount("11111");
-        userRegisterDTO.setPassword("12321321");
+        userRegisterDTO.setAccount("lizhendong");
+        userRegisterDTO.setPassword("lizhendong");
         userRegisterDTO.setCollegeId(1);
         userRegisterDTO.setMajorId(1);
-        userRegisterDTO.setPhone("1111111111");
-        userRegisterDTO.setName("q2321312312");
-        userRegisterDTO.setEmail("asdasdas@qq.com");
+        userRegisterDTO.setPhone("110");
+        userRegisterDTO.setName("李镇东");
+        userRegisterDTO.setEmail("lizhendong@qq.com");
         userRegisterDTO.setCampusId(1);
         userRegisterDTO.setYear("2018");
         userApplicationService.register(userRegisterDTO);
+    }
+
+    @Test
+    public void testLogin() {
+        UserDO user = userApplicationService.login("admin", "admin");
+        System.out.println(user);
     }
 }

@@ -1,6 +1,6 @@
 package com.lecture.app.service;
 
-import com.lecture.domain.eneities.LessonDO;
+import com.lecture.domain.entities.LessonDO;
 import com.lecture.infr.gateway.RedisGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

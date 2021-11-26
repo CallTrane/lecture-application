@@ -4,12 +4,19 @@ import com.lecture.app.assembler.UserAssembler;
 import com.lecture.app.dto.UserRegisterDTO;
 import com.lecture.app.vo.UserLoginVO;
 import com.lecture.component.exception.Assert;
+import com.lecture.component.exception.BizException;
+import com.lecture.component.exception.SystemException;
+import com.lecture.component.utils.BeanUtils;
+import com.lecture.component.utils.DataUtils;
+import com.lecture.domain.aggregates.userAggregate.UserRepository;
+import com.lecture.domain.entities.UserDO;
 import com.lecture.infr.gateway.RedisGateway;
 import com.lecture.infr.gateway.SystemGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 
 /**
  * @className: UserService
@@ -25,6 +32,9 @@ public class UserApplicationService {
 
     @Autowired
     private SystemGateway systemGateway;
+
+    @Autowired
+    private UserRepository userRepository = BeanUtils.getBean(UserRepository.class);
 
     public Object getByToken(String token, HttpServletResponse response) {
         return null;
@@ -42,7 +52,11 @@ public class UserApplicationService {
         UserAssembler.toAggregate(userRegisterDTO).registerUser();
     }
 
-    public UserLoginVO login(String account, String password) {
-        return null;
+    public UserDO login(String account, String password) {
+        UserDO user = userRepository.userLogin(account, password);
+        if (DataUtils.isEmpty(user)) {
+            throw new BizException("用户信息有误，请重新输入登录");
+        }
+        return user;
     }
 }

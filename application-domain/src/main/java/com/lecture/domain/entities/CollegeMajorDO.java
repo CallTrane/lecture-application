@@ -1,4 +1,4 @@
-package com.lecture.domain.eneities;
+package com.lecture.domain.entities;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
