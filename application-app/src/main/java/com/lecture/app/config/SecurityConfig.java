@@ -1,4 +1,4 @@
-package com.lecture.infr.config;
+package com.lecture.app.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
