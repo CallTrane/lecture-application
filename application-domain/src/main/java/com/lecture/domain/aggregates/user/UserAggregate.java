@@ -1,4 +1,4 @@
-package com.lecture.domain.aggregates.userAggregate;
+package com.lecture.domain.aggregates.user;
 
 import com.lecture.component.utils.BeanUtils;
 
@@ -34,6 +34,10 @@ public class UserAggregate {
                         () -> userRepository.registerTeacher(getUserDO(), getTeacherDO()));
     }
 
+    public UserAggregate userLogin(String account, String password) {
+        this.userDO = userRepository.userLogin(account, password);
+        return this;
+    }
 
     public UserAggregate updateUser(UserAggregate userAggregate) {
         return null;

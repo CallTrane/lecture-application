@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date: 2021/11/16 0:14
  */
 @Service
-public class CourseApplicationService {
+public class LessonApplicationService {
     @Autowired
     private RedisGateway redisGateway;
 

@@ -1,25 +1,34 @@
 package com.lecture.app.vo;
 
-import lombok.Data;
-
-import java.util.List;
-
 /**
- * @className: StudentLessonVO
- * @description: 学生所选课程信息
- * @author: carl
- * @date: 2021/11/18 12:01
+ * @classname: StudentLessonVO
+ * @description: TODO
+ * @date: 2021/11/26 19:01
+ * @author: Carl
  */
-@Data
 public class StudentLessonVO {
+    /**
+     * 校区名字
+     */
+    private String campusName;
 
     /**
-     * 学生信息
+     * 课程名
      */
-    private StudentVO studentVO;
+    private String lessonName;
 
     /**
-     * 课程信息
+     * 星期几
      */
-    private List<LessonVO> lessonVOs;
+    private String weekday;
+
+    /**
+     * 当天第几节
+     */
+    private String classes;
+
+    /**
+     * 教师信息
+     */
+    private TeacherVO teacherVO;
 }

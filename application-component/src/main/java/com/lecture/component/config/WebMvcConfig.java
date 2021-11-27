@@ -1,4 +1,4 @@
-package com.lecture.app.config;
+package com.lecture.component.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
