@@ -2,7 +2,6 @@ package com.lecture.app.service;
 
 import com.lecture.app.assembler.UserAssembler;
 import com.lecture.app.dto.UserRegisterDTO;
-import com.lecture.app.vo.StudentLessonVO;
 import com.lecture.component.exception.Assert;
 import com.lecture.component.exception.BizException;
 import com.lecture.domain.aggregates.student.StudentAggregate;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Optional;
 
 /**

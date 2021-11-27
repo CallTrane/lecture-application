@@ -1,5 +1,7 @@
 package com.lecture.infr.gateway;
 
+import com.lecture.domain.entities.StudentDO;
+
 import java.util.List;
 
 /**
@@ -10,6 +12,8 @@ import java.util.List;
  */
 
 public interface StudentGateway {
+
+    void registerStudent(StudentDO studentDO);
 
     /**
      * 查询所有

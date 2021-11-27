@@ -12,9 +12,11 @@ import java.util.Optional;
  * @author: Carl
  */
 public interface LessonGateway {
+
     /**
      * 根据学生id获取所选的课程信息
      *
+     * @param ids
      * @return
      */
     Optional<List<LessonDO>> getLessonsByIds(List<Integer> ids);
