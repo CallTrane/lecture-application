@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const Home = () => import('views/Home')
-const Desktop = () => import('views/desktop/Desktop')
+const HomeDesk = () => import('views/HomeDesk')
 const Login = () => import('views/login/Login')
 
 const routes = [
@@ -15,9 +15,9 @@ const routes = [
     component: Home
   },
   {
-    path: '/deskTop',
-    name: 'deskTop',
-    component: Desktop
+    path: '/HomeDesk',
+    name: 'HomeDesk',
+    component: HomeDesk
   },
   {
     path: '/Login',
