@@ -2,7 +2,7 @@ package com.lecture.app.assembler;
 
 import com.lecture.app.dto.UserRegisterDTO;
 import com.lecture.component.exception.SystemException;
-import com.lecture.domain.aggregates.userAggregate.UserAggregate;
+import com.lecture.domain.aggregates.user.UserAggregate;
 import com.lecture.domain.entities.StudentDO;
 import com.lecture.domain.entities.TeacherDO;
 import com.lecture.domain.entities.UserDO;

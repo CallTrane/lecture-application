@@ -36,5 +36,12 @@ server:
   error:
     include-exception: false
     include-message: always
+  tomcat:
+    max-connections: 5000
+    accept-count: 50
+    threads:
+      max: 300
+      min-spare: 40
+
 
 

@@ -1,4 +1,4 @@
-package com.lecture.domain.aggregates.userAggregate;
+package com.lecture.domain.aggregates.user;
 
 import com.lecture.component.utils.BeanUtils;
 

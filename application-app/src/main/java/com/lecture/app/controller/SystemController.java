@@ -3,10 +3,8 @@ package com.lecture.app.controller;
 import com.lecture.app.dto.UserRegisterDTO;
 import com.lecture.component.enums.ActionEnum;
 import com.lecture.app.service.UserApplicationService;
-import com.lecture.app.vo.UserLoginVO;
 import com.lecture.domain.entities.UserDO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

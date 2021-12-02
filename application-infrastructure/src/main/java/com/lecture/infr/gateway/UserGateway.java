@@ -1,6 +1,6 @@
 package com.lecture.infr.gateway;
 
-import com.lecture.domain.aggregates.userAggregate.UserRepository;
+import com.lecture.domain.aggregates.user.UserRepository;
 
 /**
  * @className: UserGateway

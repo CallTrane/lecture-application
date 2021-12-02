@@ -22,13 +22,13 @@ public class UserApplicationTest extends StartApplicationTest {
     public void testRegister() {
         UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
         userRegisterDTO.setType(1);
-        userRegisterDTO.setAccount("lizhendong");
-        userRegisterDTO.setPassword("lizhendong");
+        userRegisterDTO.setAccount("huyuxi");
+        userRegisterDTO.setPassword("huyuxi");
         userRegisterDTO.setCollegeId(1);
         userRegisterDTO.setMajorId(1);
         userRegisterDTO.setPhone("110");
-        userRegisterDTO.setName("李镇东");
-        userRegisterDTO.setEmail("lizhendong@qq.com");
+        userRegisterDTO.setName("胡宇曦");
+        userRegisterDTO.setEmail("huyuxi@qq.com");
         userRegisterDTO.setCampusId(1);
         userRegisterDTO.setYear("2018");
         userApplicationService.register(userRegisterDTO);

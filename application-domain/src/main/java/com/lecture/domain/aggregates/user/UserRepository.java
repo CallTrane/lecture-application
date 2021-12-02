@@ -1,4 +1,4 @@
-package com.lecture.domain.aggregates.userAggregate;
+package com.lecture.domain.aggregates.user;
 
 import com.lecture.domain.entities.StudentDO;
 import com.lecture.domain.entities.TeacherDO;
