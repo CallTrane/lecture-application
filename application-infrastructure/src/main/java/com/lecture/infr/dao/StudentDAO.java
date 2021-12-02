@@ -16,7 +16,7 @@ import java.util.List;
 public interface StudentDAO extends BaseMapper<StudentDO> {
 
     /**
-     * 根据学生学号，查询该学生所选的所有课程
+     * 根据学生学号，查询该学生所选的所有课程id
      *
      * @param stuId 学生学号
      * @return 课程id列表

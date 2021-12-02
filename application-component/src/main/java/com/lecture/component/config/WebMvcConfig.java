@@ -1,4 +1,4 @@
-package com.lecture.app.config;
+package com.lecture.component.config;
 
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
