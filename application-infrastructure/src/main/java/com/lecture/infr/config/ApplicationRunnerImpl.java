@@ -26,7 +26,7 @@ public class ApplicationRunnerImpl  implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        //UserAggregate.collegeMajorMap = systemGateway.getCollegeMajorMap();
+        UserAggregate.collegeMajorMap = systemGateway.getCollegeMajorMap();
         //LessonAggregate.allLessons = lessonGateway.getAllLessons();
     }
 }
