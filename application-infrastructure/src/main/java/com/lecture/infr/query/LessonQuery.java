@@ -21,14 +21,14 @@ public class LessonQuery {
     private Integer campusId;
 
     /**
-     * 必修 / 选修
+     * 必修1 / 选修0
      */
     private Integer required;
 
     /**
      * 课程名称
      */
-    private Integer lessonName;
+    private String lessonName;
 
     /**
      * 教师名字
