@@ -1,10 +1,13 @@
 package com.lecture.infr.gateway.impl;
 
+import com.lecture.component.exception.BizException;
 import com.lecture.domain.entities.UserDO;
 import com.lecture.infr.dao.UserDAO;
 import com.lecture.infr.gateway.UserGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * @className: UserGatewayImpl
@@ -26,6 +29,8 @@ public class UserGatewayImpl implements UserGateway {
 
     @Override
     public UserDO userLogin(String account, String password) {
-        return userDAO.userLogin(account, password);
+        return Optional.ofNullable(userDAO.userLogin(account, password)).orElseThrow(() -> {
+            throw new BizException("用户账号或密码输入错误");
+        });
     }
 }

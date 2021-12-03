@@ -1,5 +1,6 @@
 package com.lecture.infr.gateway.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lecture.component.utils.DataUtils;
 import com.lecture.domain.entities.TeacherDO;
 import com.lecture.infr.dao.TeacherDAO;
@@ -33,5 +34,12 @@ public class TeacherGatewayImpl implements TeacherGateway {
             return Optional.empty();
         }
         return Optional.ofNullable(teacherDAO.selectBatchIds(ids));
+    }
+
+    @Override
+    public TeacherDO getTeacherByUid(Integer uid) {
+        LambdaQueryWrapper<TeacherDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(TeacherDO::getUid, uid);
+        return teacherDAO.selectOne(wrapper);
     }
 }

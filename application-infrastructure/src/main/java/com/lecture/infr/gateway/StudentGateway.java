@@ -22,4 +22,6 @@ public interface StudentGateway {
      * @return
      */
     List<Integer> getLessonIds(Long studentId);
+
+    StudentDO getStudentByUid(Integer uid);
 }

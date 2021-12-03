@@ -1,16 +1,21 @@
 package com.lecture.infr.gateway.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.lecture.component.utils.DataUtils;
 import com.lecture.domain.entities.LessonDO;
 import com.lecture.infr.dao.LessonDAO;
 import com.lecture.infr.gateway.LessonGateway;
 import com.lecture.infr.query.LessonQuery;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @className: LessonGatewayImpl
@@ -22,11 +27,27 @@ import java.util.Optional;
 public class LessonGatewayImpl implements LessonGateway {
 
     @Autowired
-    LessonDAO lessonDAO;
+    private LessonDAO lessonDAO;
+
+    /**
+     * 查询所有课程
+     *
+     * @return
+     */
+    private List<LessonDO> getAllLesson() {
+        QueryWrapper<LessonDO> wrapper = new QueryWrapper<>();
+        return lessonDAO.selectList(wrapper);
+    }
+
 
     @Override
-    public Map<Integer, List<LessonDO>> getAllLesson() {
-        return null;
+    public Map<Integer, List<LessonDO>> getCollegeLessonsMap() {
+        return getAllLesson().stream().collect(Collectors.groupingBy(LessonDO::getCollegeId));
+    }
+
+    @Override
+    public Map<Integer, List<LessonDO>> getMajorLessonsMap() {
+        return getAllLesson().stream().collect(Collectors.groupingBy(LessonDO::getMajorId));
     }
 
     @Override
@@ -53,5 +74,12 @@ public class LessonGatewayImpl implements LessonGateway {
         return Optional.ofNullable(lessonDAO.selectBatchIds(ids));
     }
 
-
+    @Override
+    public List<LessonDO> getLessonsByStuId(Long stuId) {
+        List<Integer> lessonIds = lessonDAO.getLessonIdByStudentId(stuId);
+        if (DataUtils.isEmpty(lessonIds)) {
+            return Collections.emptyList();
+        }
+        return lessonDAO.selectBatchIds(lessonIds);
+    }
 }

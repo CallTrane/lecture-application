@@ -1,5 +1,8 @@
 package com.lecture.infr.gateway.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lecture.domain.entities.StudentDO;
 import com.lecture.infr.dao.StudentDAO;
 import com.lecture.infr.gateway.StudentGateway;
@@ -28,5 +31,12 @@ public class StudentGatewayImpl implements StudentGateway {
     @Override
     public List<Integer> getLessonIds(Long studentId) {
         return studentDAO.getLessonIdsByStuId(studentId);
+    }
+
+    @Override
+    public StudentDO getStudentByUid(Integer uid) {
+        LambdaQueryWrapper<StudentDO> wrapper = new LambdaQueryWrapper();
+        wrapper.eq(StudentDO::getUid, uid);
+        return studentDAO.selectOne(wrapper);
     }
 }

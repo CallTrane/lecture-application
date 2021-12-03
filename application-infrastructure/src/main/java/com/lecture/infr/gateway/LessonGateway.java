@@ -15,7 +15,19 @@ import java.util.Optional;
  */
 public interface LessonGateway {
 
-    Map<Integer, List<LessonDO>> getAllLesson();
+    /**
+     * 获取学院对应课程
+     *
+     * @return
+     */
+    Map<Integer, List<LessonDO>> getCollegeLessonsMap();
+
+    /**
+     * 获取专业对应课程
+     *
+     * @return
+     */
+    Map<Integer, List<LessonDO>> getMajorLessonsMap();
 
     /**
      * 根据专业id获取课程
@@ -30,4 +42,12 @@ public interface LessonGateway {
     List<LessonDO> getLessonsByCondition(LessonQuery lessonQuery);
 
     Optional<List<LessonDO>> getLessonsByIds(List<Integer> ids);
+
+    /**
+     * 根据学生id查询课程信息
+     *
+     * @param stuId
+     * @return
+     */
+    List<LessonDO> getLessonsByStuId(Long stuId);
 }

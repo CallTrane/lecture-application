@@ -89,4 +89,8 @@ public class LessonApplicationService {
     public List<LessonDO> queryLessons(LessonQuery lessonQuery) {
         return lessonGateway.getLessonsByCondition(lessonQuery);
     }
+
+    public List<LessonDO> getLessonsByStuId(Long stuId) {
+        return lessonGateway.getLessonsByStuId(stuId);
+    }
 }

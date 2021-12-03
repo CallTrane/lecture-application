@@ -3,6 +3,7 @@ package com.lecture.app.controller;
 import com.lecture.app.dto.UserRegisterDTO;
 import com.lecture.component.enums.ActionEnum;
 import com.lecture.app.service.UserApplicationService;
+import com.lecture.domain.aggregates.user.UserAggregate;
 import com.lecture.domain.entities.UserDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -35,7 +36,7 @@ public class SystemController {
     }
 
     @PostMapping("/login")
-    public UserDO userLogin(@Validated String account, @Validated String password) {
+    public UserAggregate userLogin(@Validated String account, @Validated String password) {
         return userApplicationService.login(account, password);
     }
 }

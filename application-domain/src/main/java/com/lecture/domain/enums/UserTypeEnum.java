@@ -30,7 +30,7 @@ public enum UserTypeEnum {
     private static final Map<Integer, UserTypeEnum> USER_TYPE_ENUM_MAP = Arrays.stream(UserTypeEnum.values())
             .collect(Collectors.toMap(UserTypeEnum::getType, Function.identity()));
 
-    UserTypeEnum parse(Integer type) {
+    public static UserTypeEnum parse(Integer type) {
         return USER_TYPE_ENUM_MAP.get(type);
     }
 }

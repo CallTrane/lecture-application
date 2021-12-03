@@ -17,4 +17,6 @@ import java.util.List;
 @Mapper
 public interface LessonDAO extends BaseMapper<LessonDO> {
     List<LessonDO> getLessonsByCondition(@Param("query") LessonQuery query);
+
+    List<Integer> getLessonIdByStudentId(Long studentId);
 }

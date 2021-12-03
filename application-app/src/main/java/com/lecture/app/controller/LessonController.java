@@ -22,11 +22,12 @@ public class LessonController {
     LessonApplicationService lessonApplicationService;
 
     /**
+     * 查询课程
      *
      * @param lessonQueryDTO
      * @return
      */
-    @GetMapping("/list")
+    @PostMapping("/list")
     @ResponseBody
     public List<LessonDO> getLessonsById(@RequestBody LessonQuery lessonQueryDTO) {
         return lessonApplicationService.queryLessons(lessonQueryDTO);

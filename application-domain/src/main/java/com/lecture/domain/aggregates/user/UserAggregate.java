@@ -2,12 +2,17 @@ package com.lecture.domain.aggregates.user;
 
 import com.lecture.component.utils.BeanUtils;
 
+import com.lecture.domain.entities.CollegeMajorDO;
 import com.lecture.domain.entities.StudentDO;
 import com.lecture.domain.entities.TeacherDO;
 import com.lecture.domain.entities.UserDO;
+import com.lecture.domain.enums.UserTypeEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -20,7 +25,15 @@ import java.util.Optional;
 @NoArgsConstructor
 public class UserAggregate {
 
-    private UserRepository userRepository = BeanUtils.getBean(UserRepository.class);
+    public static Map<Integer, Map<Integer, CollegeMajorDO>> collegeMajorMap = new HashMap<>();
+
+    public static Map<Integer, CollegeMajorDO> collegeMap = new HashMap<>();
+
+    private static UserRepository userRepository = BeanUtils.getBean(UserRepository.class);
+
+    private UserTypeEnum userTypeEnum;
+
+    private CollegeMajorDO collegeMajorDO;
 
     private UserDO userDO;
 
@@ -36,6 +49,12 @@ public class UserAggregate {
 
     public UserAggregate userLogin(String account, String password) {
         this.userDO = userRepository.userLogin(account, password);
+        if (Objects.equals((this.userTypeEnum = UserTypeEnum.parse(userDO.getType())), UserTypeEnum.STUDENT)) {
+            this.studentDO = userRepository.getStudentByUid(userDO.getUid());
+            this.collegeMajorDO = collegeMajorMap.get(studentDO.getCollegeId()).get(studentDO.getMajorId());
+        } else if (Objects.equals(userTypeEnum, UserTypeEnum.TEACHER)) {
+            this.teacherDO = userRepository.getTeacherByUid(userDO.getUid());
+        }
         return this;
     }
 

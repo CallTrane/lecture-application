@@ -21,4 +21,6 @@ public interface TeacherGateway {
     void registerTeacher(TeacherDO teacherDO);
 
     Optional<List<TeacherDO>> getTeachersByIds(List<Long> ids);
+
+    TeacherDO getTeacherByUid(Integer uid);
 }

@@ -1,15 +1,19 @@
 package com.lecture.infr.repository;
 
 import com.lecture.domain.aggregates.user.UserRepository;
+import com.lecture.domain.entities.CollegeMajorDO;
 import com.lecture.domain.entities.StudentDO;
 import com.lecture.domain.entities.TeacherDO;
 import com.lecture.domain.entities.UserDO;
 import com.lecture.infr.gateway.StudentGateway;
+import com.lecture.infr.gateway.SystemGateway;
 import com.lecture.infr.gateway.TeacherGateway;
 import com.lecture.infr.gateway.UserGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 /**
  * @classname: UserRepositoryImpl
@@ -22,6 +26,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Autowired
     UserGateway userGateway;
+
+    @Autowired
+    SystemGateway systemGateway;
 
     @Autowired
     StudentGateway studentGateway;
@@ -50,5 +57,20 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserDO userLogin(String account, String password) {
         return userGateway.userLogin(account, password);
+    }
+
+    @Override
+    public Map<Integer, Map<Integer, CollegeMajorDO>> getCollegeMajorMap() {
+        return systemGateway.getCollegeMajorMap();
+    }
+
+    @Override
+    public StudentDO getStudentByUid(Integer uid) {
+        return studentGateway.getStudentByUid(uid);
+    }
+
+    @Override
+    public TeacherDO getTeacherByUid(Integer uid) {
+        return teacherGateway.getTeacherByUid(uid);
     }
 }

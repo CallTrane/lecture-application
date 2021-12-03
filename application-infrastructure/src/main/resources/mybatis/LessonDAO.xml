@@ -19,7 +19,7 @@
                 and name LIKE CONCAT('%',#{query.lessonName},'%')
             </if>
             <if test="query.teacherName != null">
-                and teacher_name LIKE CONCAT('%',#{query.teacherName},'%')
+                and teacher_name LIKE CONCAT('%', #{query.teacherName}, '%')
             </if>
             <if test="query.collegeId != null">
                 and college_id = #{query.collegeId}
@@ -29,4 +29,10 @@
             </if>
         </where>
     </select>
+    <select id="getLessonIdByStudentId" resultType="java.lang.Integer">
+        select l_id
+        from student_lesson
+        where stu_id = #{studentId}
+    </select>
+
 </mapper>

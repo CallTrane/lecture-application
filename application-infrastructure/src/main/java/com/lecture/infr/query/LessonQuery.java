@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class LessonQuery {
+public class LessonQuery extends BaseQuery {
 
     /**
      * 校区

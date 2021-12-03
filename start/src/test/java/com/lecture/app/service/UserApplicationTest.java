@@ -34,9 +34,9 @@ public class UserApplicationTest extends StartApplicationTest {
         userApplicationService.register(userRegisterDTO);
     }
 
-    @Test
+    /*@Test
     public void testLogin() {
         UserDO user = userApplicationService.login("admin", "admin");
         System.out.println(user);
-    }
+    }*/
 }

@@ -1,9 +1,12 @@
 package com.lecture.domain.aggregates.user;
 
+import com.lecture.domain.entities.CollegeMajorDO;
 import com.lecture.domain.entities.StudentDO;
 import com.lecture.domain.entities.TeacherDO;
 import com.lecture.domain.entities.UserDO;
 import org.springframework.stereotype.Repository;
+
+import java.util.Map;
 
 /**
  * @className: UserRepository
@@ -19,4 +22,10 @@ public interface UserRepository {
     void registerTeacher(UserDO userDO, TeacherDO teacherDO);
 
     UserDO userLogin(String account, String password);
+
+    Map<Integer, Map<Integer, CollegeMajorDO>> getCollegeMajorMap();
+
+    StudentDO getStudentByUid(Integer uid);
+
+    TeacherDO getTeacherByUid(Integer uid);
 }
