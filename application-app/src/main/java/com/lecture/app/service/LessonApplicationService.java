@@ -1,16 +1,22 @@
 package com.lecture.app.service;
 
+import com.lecture.app.assembler.LessonAssembler;
+import com.lecture.component.utils.DataUtils;
 import com.lecture.infr.query.LessonQuery;
 import com.lecture.domain.entities.LessonDO;
 import com.lecture.infr.gateway.LessonGateway;
 import com.lecture.infr.gateway.RedisGateway;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 /**
  * @className: CourseService
@@ -86,11 +92,59 @@ public class LessonApplicationService {
         });
     }
 
+    /**
+     * 根据条件查询课程
+     *
+     * @param lessonQuery
+     * @return
+     */
     public List<LessonDO> queryLessons(LessonQuery lessonQuery) {
-        return lessonGateway.getLessonsByCondition(lessonQuery);
+        String lessonKey = LessonAssembler.getRedisKey(lessonQuery);
+        List<LessonDO> result = Optional.ofNullable(redisGateway.getList(lessonKey, LessonDO.class)).orElseGet(() -> {
+            List<LessonDO> value = lessonGateway.getLessonsByCondition(lessonQuery);
+            redisGateway.set(lessonKey, value);
+            return value;
+        });
+        return result.stream().filter(lessonDO ->
+                StringUtils.contains(lessonDO.getTeacherName(), Optional.ofNullable(lessonQuery.getTeacherName()).orElse("")) &
+                        StringUtils.contains(lessonDO.getName(), Optional.ofNullable(lessonQuery.getLessonName()).orElse("")) &
+                        (lessonQuery.getWeekday() == null || Optional.ofNullable(lessonQuery.getWeekday()).equals(lessonDO.getWeekday())) &
+                        (lessonQuery.getRequired() == null || Optional.ofNullable(lessonQuery.getRequired()).equals(lessonDO.getRequired()))
+        ).collect(Collectors.toList());
     }
 
+    /**
+     * 获取学生所选课程
+     *
+     * @param stuId
+     * @return
+     */
     public List<LessonDO> getLessonsByStuId(Long stuId) {
-        return lessonGateway.getLessonsByStuId(stuId);
+        String key = LessonAssembler.getRedisKey(stuId);
+        return Optional.ofNullable(redisGateway.getList(key, LessonDO.class)).orElseGet(() -> {
+            List<LessonDO> result = lessonGateway.getLessonsByStuId(stuId);
+            redisGateway.set(key, result);
+            return result;
+        });
+    }
+
+    /**
+     * 学生选课
+     *
+     * @param lessonId
+     * @param stuId
+     */
+    public void selectLesson(Integer lessonId, Long stuId) {
+        lessonGateway.selectLesson(lessonId, stuId);
+    }
+
+    /**
+     * 学生退课
+     *
+     * @param lessonId
+     * @param stuId
+     */
+    public void dropLesson(Integer lessonId, Long stuId) {
+        lessonGateway.dropLesson(lessonId, stuId);
     }
 }

@@ -29,7 +29,7 @@ public class LessonController {
      */
     @PostMapping("/list")
     @ResponseBody
-    public List<LessonDO> getLessonsById(@RequestBody LessonQuery lessonQueryDTO) {
+    public List<LessonDO> getLessons(@RequestBody LessonQuery lessonQueryDTO) {
         return lessonApplicationService.queryLessons(lessonQueryDTO);
     }
 

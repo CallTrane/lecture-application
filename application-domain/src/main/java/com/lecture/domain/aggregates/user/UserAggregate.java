@@ -31,6 +31,8 @@ public class UserAggregate {
 
     private static UserRepository userRepository = BeanUtils.getBean(UserRepository.class);
 
+    private static final String USER_KEY = "user";
+
     private UserTypeEnum userTypeEnum;
 
     private CollegeMajorDO collegeMajorDO;
@@ -48,14 +50,18 @@ public class UserAggregate {
     }
 
     public UserAggregate userLogin(String account, String password) {
-        this.userDO = userRepository.userLogin(account, password);
-        if (Objects.equals((this.userTypeEnum = UserTypeEnum.parse(userDO.getType())), UserTypeEnum.STUDENT)) {
-            this.studentDO = userRepository.getStudentByUid(userDO.getUid());
-            this.collegeMajorDO = collegeMajorMap.get(studentDO.getCollegeId()).get(studentDO.getMajorId());
-        } else if (Objects.equals(userTypeEnum, UserTypeEnum.TEACHER)) {
-            this.teacherDO = userRepository.getTeacherByUid(userDO.getUid());
-        }
-        return this;
+        String userKey = USER_KEY + account;
+        return Optional.ofNullable(userRepository.getUserByRedis(userKey)).orElseGet(() -> {
+            this.userDO = userRepository.userLogin(account, password);
+            if (Objects.equals((this.userTypeEnum = UserTypeEnum.parse(userDO.getType())), UserTypeEnum.STUDENT)) {
+                this.studentDO = userRepository.getStudentByUid(userDO.getUid());
+                this.collegeMajorDO = collegeMajorMap.get(studentDO.getCollegeId()).get(studentDO.getMajorId());
+            } else if (Objects.equals(userTypeEnum, UserTypeEnum.TEACHER)) {
+                this.teacherDO = userRepository.getTeacherByUid(userDO.getUid());
+            }
+            userRepository.saveUserInRedis(userKey, this);
+            return this;
+        });
     }
 
     public UserAggregate updateUser(UserAggregate userAggregate) {

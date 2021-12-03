@@ -1,19 +1,18 @@
 package com.lecture.infr.repository;
 
+import com.lecture.domain.aggregates.user.UserAggregate;
 import com.lecture.domain.aggregates.user.UserRepository;
 import com.lecture.domain.entities.CollegeMajorDO;
 import com.lecture.domain.entities.StudentDO;
 import com.lecture.domain.entities.TeacherDO;
 import com.lecture.domain.entities.UserDO;
-import com.lecture.infr.gateway.StudentGateway;
-import com.lecture.infr.gateway.SystemGateway;
-import com.lecture.infr.gateway.TeacherGateway;
-import com.lecture.infr.gateway.UserGateway;
+import com.lecture.infr.gateway.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @classname: UserRepositoryImpl
@@ -23,6 +22,8 @@ import java.util.Map;
  */
 @Service
 public class UserRepositoryImpl implements UserRepository {
+
+    private static final ReentrantLock REDIS_LOCK = new ReentrantLock();
 
     @Autowired
     UserGateway userGateway;
@@ -35,6 +36,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Autowired
     TeacherGateway teacherGateway;
+
+    @Autowired
+    RedisGateway redisGateway;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -72,5 +76,15 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public TeacherDO getTeacherByUid(Integer uid) {
         return teacherGateway.getTeacherByUid(uid);
+    }
+
+    @Override
+    public UserAggregate getUserByRedis(String userKey) {
+        return redisGateway.get(userKey);
+    }
+
+    @Override
+    public void saveUserInRedis(String userKey, UserAggregate userAggregate) {
+        redisGateway.set(userKey, userAggregate);
     }
 }

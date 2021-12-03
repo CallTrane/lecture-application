@@ -2,15 +2,13 @@ package com.lecture.app.controller;
 
 import com.lecture.app.service.LessonApplicationService;
 import com.lecture.app.service.UserApplicationService;
+import com.lecture.component.enums.ActionEnum;
 import com.lecture.domain.aggregates.student.StudentAggregate;
 import com.lecture.domain.entities.LessonDO;
 import com.lecture.domain.entities.StudentDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,7 +29,20 @@ public class StudentController {
     LessonApplicationService lessonApplicationService;
 
     @GetMapping("/get_lessons")
+    @ResponseBody
     public List<LessonDO> getByStuId(@RequestParam Long stuId) {
         return lessonApplicationService.getLessonsByStuId(stuId);
+    }
+
+    @PostMapping("/select_lesson")
+    public ActionEnum selectLesson(@RequestParam Integer lessonId, @RequestParam Long stuId) {
+        lessonApplicationService.selectLesson(lessonId, stuId);
+        return ActionEnum.SUCCESS;
+    }
+
+    @PostMapping("/drop_lesson")
+    public ActionEnum dropLesson(@RequestParam Integer lessonId, @RequestParam Long stuId) {
+        lessonApplicationService.dropLesson(lessonId, stuId);
+        return ActionEnum.SUCCESS;
     }
 }

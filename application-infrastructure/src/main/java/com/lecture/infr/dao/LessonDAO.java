@@ -19,4 +19,8 @@ public interface LessonDAO extends BaseMapper<LessonDO> {
     List<LessonDO> getLessonsByCondition(@Param("query") LessonQuery query);
 
     List<Integer> getLessonIdByStudentId(Long studentId);
+
+    void selectLesson(Integer lessonId, Long stuId);
+
+    void dropLesson(Integer lessonId, Long stuId);
 }

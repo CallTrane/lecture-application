@@ -3,7 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lecture.infr.dao.LessonDAO">
-
     <select id="getLessonsByCondition" resultType="com.lecture.domain.entities.LessonDO">
         SELECT *
         FROM lesson
@@ -24,6 +23,9 @@
             <if test="query.collegeId != null">
                 and college_id = #{query.collegeId}
             </if>
+            <if test="query.weekday != null">
+                and weekday = #{query.weekday}
+            </if>
             <if test="query.majorId != null">
                 and major_id = #{query.majorId}
             </if>
@@ -32,7 +34,19 @@
     <select id="getLessonIdByStudentId" resultType="java.lang.Integer">
         select l_id
         from student_lesson
-        where stu_id = #{studentId}
+        where delete_flag = 1 and stu_id = #{studentId}
     </select>
+
+    <insert id="selectLesson">
+        INSERT
+        INTO student_lesson(stu_id,l_id)
+        VALUES(#{stuId},#{lessonId})
+    </insert>
+
+    <update id="dropLesson">
+        UPDATE student_lesson
+        SET delete_flag = 1
+        WHERE stu_id = #{stuId} and l_id = #{lessonId}
+    </update>
 
 </mapper>

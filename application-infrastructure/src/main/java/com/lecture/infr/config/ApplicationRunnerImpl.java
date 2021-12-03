@@ -1,6 +1,8 @@
 package com.lecture.infr.config;
 
+import com.lecture.domain.aggregates.lesson.LessonAggregate;
 import com.lecture.domain.aggregates.user.UserAggregate;
+import com.lecture.infr.gateway.LessonGateway;
 import com.lecture.infr.gateway.SystemGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -19,8 +21,12 @@ public class ApplicationRunnerImpl  implements ApplicationRunner {
     @Autowired
     SystemGateway systemGateway;
 
+    @Autowired
+    LessonGateway lessonGateway;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         UserAggregate.collegeMajorMap = systemGateway.getCollegeMajorMap();
+        LessonAggregate.allLessons = lessonGateway.getAllLessons();
     }
 }

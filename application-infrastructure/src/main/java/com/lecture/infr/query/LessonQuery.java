@@ -35,8 +35,16 @@ public class LessonQuery extends BaseQuery {
      */
     private String teacherName;
 
+    /**
+     * 星期几
+     */
+    private Integer weekday;
+
     private Integer collegeId;
 
+    /**
+     * 专业id
+     */
     private Integer majorId;
 
 

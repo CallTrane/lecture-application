@@ -15,6 +15,8 @@ import java.util.Optional;
  */
 public interface LessonGateway {
 
+    List<LessonDO> getAllLessons();
+
     /**
      * 获取学院对应课程
      *
@@ -50,4 +52,20 @@ public interface LessonGateway {
      * @return
      */
     List<LessonDO> getLessonsByStuId(Long stuId);
+
+    /**
+     * 学生选课
+     *
+     * @param lessonId
+     * @param stuId
+     */
+    void selectLesson(Integer lessonId, Long stuId);
+
+    /**
+     * 学生退课
+     *
+     * @param lessonId
+     * @param stuId
+     */
+    void dropLesson(Integer lessonId, Long stuId);
 }

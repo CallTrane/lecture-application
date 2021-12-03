@@ -41,6 +41,11 @@ public class LessonGatewayImpl implements LessonGateway {
 
 
     @Override
+    public List<LessonDO> getAllLessons() {
+        return lessonDAO.selectList(null);
+    }
+
+    @Override
     public Map<Integer, List<LessonDO>> getCollegeLessonsMap() {
         return getAllLesson().stream().collect(Collectors.groupingBy(LessonDO::getCollegeId));
     }
@@ -81,5 +86,16 @@ public class LessonGatewayImpl implements LessonGateway {
             return Collections.emptyList();
         }
         return lessonDAO.selectBatchIds(lessonIds);
+    }
+
+    // todo: 选课和退课需要刷新缓存
+    @Override
+    public void selectLesson(Integer lessonId, Long stuId) {
+        lessonDAO.selectLesson(lessonId, stuId);
+    }
+
+    @Override
+    public void dropLesson(Integer lessonId, Long stuId) {
+        lessonDAO.dropLesson(lessonId, stuId);
     }
 }

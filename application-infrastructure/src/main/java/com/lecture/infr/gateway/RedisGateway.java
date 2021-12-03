@@ -10,25 +10,32 @@ import java.util.Set;
  * @date: 2021/11/16 0:28
  */
 public interface RedisGateway {
-    boolean set(String key, Object value);
 
-    boolean set(String key, Object value, Long expireTime);
+    <V> boolean set(String key, V value);
+
+    <V> boolean set(String key, V value, Long expireTime);
+
+    <V> boolean setList(String key, List<V> list);
 
     void remove(String... keys);
 
     /**
      * 批量删除key
+     *
      * @param pattern
      */
     void removePattern(String pattern);
 
     /**
      * 删除对应的value
+     *
      * @param key
      */
     void remove(String key);
+
     /**
      * 判断缓存中是否有对应的value
+     *
      * @param key
      * @return
      */
@@ -36,12 +43,25 @@ public interface RedisGateway {
 
     /**
      * 读取缓存
+     *
      * @param key
      * @return
      */
-    Object get(String key);
+    <V> V get(String key);
+
+    /**
+     * 获取List列表
+     *
+     * @param key
+     * @param clazz
+     * @param <V>
+     * @return
+     */
+    <V> List<V> getList(String key, Class<V> clazz);
+
     /**
      * 哈希 添加
+     *
      * @param key
      * @param hashKey
      * @param value
@@ -50,6 +70,7 @@ public interface RedisGateway {
 
     /**
      * 哈希获取数据
+     *
      * @param key
      * @param hashKey
      * @return
@@ -58,6 +79,7 @@ public interface RedisGateway {
 
     /**
      * 列表添加
+     *
      * @param k
      * @param v
      */
@@ -65,6 +87,7 @@ public interface RedisGateway {
 
     /**
      * 列表获取
+     *
      * @param k
      * @param l
      * @param l1
@@ -74,6 +97,7 @@ public interface RedisGateway {
 
     /**
      * 集合添加
+     *
      * @param key
      * @param value
      */
@@ -81,6 +105,7 @@ public interface RedisGateway {
 
     /**
      * 集合获取
+     *
      * @param key
      * @return
      */
@@ -88,6 +113,7 @@ public interface RedisGateway {
 
     /**
      * 有序集合添加
+     *
      * @param key
      * @param value
      * @param scoure
@@ -96,6 +122,7 @@ public interface RedisGateway {
 
     /**
      * 有序集合获取
+     *
      * @param key
      * @param scoure
      * @param scoure1

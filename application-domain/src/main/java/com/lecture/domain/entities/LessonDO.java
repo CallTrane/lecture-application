@@ -79,4 +79,9 @@ public class LessonDO {
      * 1为必修，0为选修
      */
     private Integer required;
+
+    /**
+     * 校区id
+     */
+    private Integer campusId;
 }

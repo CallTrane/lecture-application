@@ -1,7 +1,14 @@
 package com.lecture.infr.gateway.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lecture.domain.entities.CollegeMajorDO;
 import com.lecture.infr.gateway.RedisGateway;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JacksonJsonParser;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +23,14 @@ import java.util.concurrent.TimeUnit;
  * @author: carl
  * @date: 2021/11/16 0:28
  */
+@Slf4j
 @Service
 public class RedisGatewayImpl implements RedisGateway {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    private static ObjectMapper mapper = new ObjectMapper();
 
     /**
      * 写入缓存
@@ -29,7 +39,7 @@ public class RedisGatewayImpl implements RedisGateway {
      * @return boolean
      */
     @Override
-    public boolean set(String key, Object value) {
+    public <V> boolean set(String key, V value) {
         boolean result = false;
         try {
             ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
@@ -48,7 +58,7 @@ public class RedisGatewayImpl implements RedisGateway {
      * @return boolean
      */
     @Override
-    public boolean set(String key, Object value, Long expireTime) {
+    public <V> boolean set(String key, V value, Long expireTime) {
         boolean result = false;
         try {
             ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
@@ -59,6 +69,17 @@ public class RedisGatewayImpl implements RedisGateway {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public <V> boolean setList(String key, List<V> list) {
+        try {
+            redisTemplate.opsForValue().set(key, mapper.writeValueAsString(list));
+        } catch (Exception e) {
+            log.info("写入Redis数据失败 key:{} value:{}", key, list);
+            e.printStackTrace();
+        }
+        return true;
     }
 
     /**
@@ -79,8 +100,9 @@ public class RedisGatewayImpl implements RedisGateway {
     @Override
     public void removePattern(String pattern) {
         Set<Serializable> keys = redisTemplate.keys(pattern);
-        if (keys.size() > 0)
+        if (keys.size() > 0) {
             redisTemplate.delete(keys);
+        }
     }
 
     /**
@@ -110,10 +132,21 @@ public class RedisGatewayImpl implements RedisGateway {
      * @return
      */
     @Override
-    public Object get(String key) {
-        Object result = null;
+    public <V> V get(String key) {
         ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
-        result = operations.get(key);
+        return (V) operations.get(key);
+    }
+
+    @Override
+    public <V> List<V> getList(String key, Class<V> clazz) {
+        List<V> result = null;
+        JavaType javaType = mapper.getTypeFactory().constructParametricType(List.class, clazz);
+        try {
+            // result = mapper.readValue(key, new TypeReference<List<V>>() {});
+            result = get(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return result;
     }
     /**
@@ -136,6 +169,12 @@ public class RedisGatewayImpl implements RedisGateway {
      */
     @Override
     public Object hmGet(String key, Object hashKey){
+        try {
+            mapper.readValue(key, new TypeReference<List<CollegeMajorDO>>() {
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         HashOperations<String, Object, Object> hash = redisTemplate.opsForHash();
         return hash.get(key,hashKey);
     }

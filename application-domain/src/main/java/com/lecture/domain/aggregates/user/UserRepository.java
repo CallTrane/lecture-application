@@ -28,4 +28,8 @@ public interface UserRepository {
     StudentDO getStudentByUid(Integer uid);
 
     TeacherDO getTeacherByUid(Integer uid);
+
+    UserAggregate getUserByRedis(String userKey);
+
+    void saveUserInRedis(String userKey, UserAggregate userAggregate);
 }

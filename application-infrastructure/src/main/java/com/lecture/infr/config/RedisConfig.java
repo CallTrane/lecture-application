@@ -41,6 +41,24 @@ public class RedisConfig<K, V> {
      */
     private Map<String, Long> ttlMap;
 
+    @Bean
+    public RedisTemplate<K, V> redisTemplate(LettuceConnectionFactory factory) {
+        RedisTemplate<K, V> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(factory);
+        // key序列化方式采用String
+        redisTemplate.setKeySerializer(stringRedisSerializer());
+        // value序列化方式采用jackson
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
+        // hash序列化方式采用String
+        redisTemplate.setHashKeySerializer(stringRedisSerializer());
+        // hash的value序列化方式采用jackson
+        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer());
+        redisTemplate.afterPropertiesSet();
+        // 开启事务支持
+        redisTemplate.setEnableTransactionSupport(true);
+        return redisTemplate;
+    }
+
     /**
      * string序列化器
      * @return
@@ -62,24 +80,6 @@ public class RedisConfig<K, V> {
         objectMapper.activateDefaultTyping(objectMapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL);
         jacksonSerializer.setObjectMapper(objectMapper);
         return jacksonSerializer;
-    }
-
-    @Bean
-    RedisTemplate<K, V> redisTemplate(LettuceConnectionFactory factory) {
-        RedisTemplate<K, V> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(factory);
-        // key序列化方式采用String
-        redisTemplate.setKeySerializer(stringRedisSerializer());
-        // value序列化方式采用jackson
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
-        // hash序列化方式采用String
-        redisTemplate.setHashKeySerializer(stringRedisSerializer());
-        // hash的value序列化方式采用jackson
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer());
-        redisTemplate.afterPropertiesSet();
-        // 开启事务支持
-        redisTemplate.setEnableTransactionSupport(true);
-        return redisTemplate;
     }
 
     /**
