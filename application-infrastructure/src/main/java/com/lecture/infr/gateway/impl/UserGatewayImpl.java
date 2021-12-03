@@ -24,7 +24,6 @@ public class UserGatewayImpl implements UserGateway {
         return userDO.getUid();
     }
 
-
     @Override
     public UserDO userLogin(String account, String password) {
         return userDAO.userLogin(account, password);

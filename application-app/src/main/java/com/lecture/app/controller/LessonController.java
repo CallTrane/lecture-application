@@ -1,6 +1,6 @@
 package com.lecture.app.controller;
 
-import com.lecture.app.dto.LessonQueryDTO;
+import com.lecture.infr.query.LessonQuery;
 import com.lecture.app.service.LessonApplicationService;
 import com.lecture.domain.entities.LessonDO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +29,8 @@ public class LessonController {
      */
     @GetMapping("/getById")
     @ResponseBody
-    public List<LessonDO> getLessonsById(@RequestBody @Validated LessonQueryDTO lessonQueryDTO) {
-        return lessonApplicationService.getLessonsById(lessonQueryDTO);
+    public List<LessonDO> getLessonsById(@RequestBody @Validated LessonQuery lessonQueryDTO) {
+        return lessonApplicationService.queryLessons(lessonQueryDTO);
     }
 
 }

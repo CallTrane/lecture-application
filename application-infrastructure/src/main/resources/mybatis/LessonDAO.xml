@@ -4,4 +4,23 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lecture.infr.dao.LessonDAO">
 
+    <select id="getLessonsByCondition" resultType="com.lecture.domain.entities.LessonDO">
+        SELECT *
+        FROM lesson
+        <where>
+            true
+            <if test="query.campusId != null">
+                and campus_id = #{query.campusId}
+            </if>
+            <if test="query.collegeId != null">
+                and college_id = #{query.collegeId}
+            </if>
+            <if test="query.majorId != null">
+                and major_id = #{query.majorId}
+            </if>
+            <if test="query.required != null">
+                and required = #{query.required}
+            </if>
+        </where>
+    </select>
 </mapper>

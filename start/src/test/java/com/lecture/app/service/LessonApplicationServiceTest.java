@@ -1,7 +1,7 @@
 package com.lecture.app.service;
 
 import com.lecture.StartApplicationTest;
-import com.lecture.app.dto.LessonQueryDTO;
+import com.lecture.infr.query.LessonQuery;
 import org.junit.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,12 @@ public class LessonApplicationServiceTest extends StartApplicationTest {
 
     @Test
     public void baseTest() {
-        LessonQueryDTO major = new LessonQueryDTO("", 1011);
-        System.out.println(applicationService.getLessonsById(major).toString());
+        LessonQuery lessonQuery = new LessonQuery();
+        /*lessonQuery.setCampusId();
+        lessonQuery.setCollegeId();
+        lessonQuery.setMajorId();
+        lessonQuery.setRequired();*/
+        applicationService.queryLessons(lessonQuery).forEach(System.out::println);
     }
 
     @Test

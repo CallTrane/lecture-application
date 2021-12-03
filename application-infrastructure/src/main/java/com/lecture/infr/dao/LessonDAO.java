@@ -2,7 +2,10 @@ package com.lecture.infr.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lecture.domain.entities.LessonDO;
+import com.lecture.infr.query.LessonQuery;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * @className: LessonDAO
@@ -12,4 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface LessonDAO extends BaseMapper<LessonDO> {
+    List<LessonDO> getLessonsByCondition(LessonQuery query);
 }

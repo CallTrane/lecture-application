@@ -1,9 +1,11 @@
 package com.lecture.infr.gateway;
 
 import com.lecture.domain.entities.LessonDO;
+import com.lecture.infr.query.LessonQuery;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @className: LessonGateway
@@ -24,4 +26,8 @@ public interface LessonGateway {
     List<LessonDO> getLessonsByMajorId(Integer majorId);
 
     List<LessonDO> getLessonsByCollegeId(Integer collegeId);
+
+    List<LessonDO> getLessonsByCondition(LessonQuery lessonQuery);
+
+    Optional<List<LessonDO>> getLessonsByIds(List<Integer> ids);
 }

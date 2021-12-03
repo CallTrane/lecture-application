@@ -64,4 +64,19 @@ public class LessonDO {
      * 学分
      */
     private Integer credit;
+
+    /**
+     * 剩余人数
+     */
+    private Integer remainPeople;
+
+    /**
+     * 总人数
+     */
+    private Integer totalPeople;
+
+    /**
+     * 1为必修，0为选修
+     */
+    private Integer required;
 }

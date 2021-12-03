@@ -1,7 +1,6 @@
 package com.lecture.app.service;
 
-import com.lecture.app.dto.LessonQueryDTO;
-import com.lecture.component.exception.BizException;
+import com.lecture.infr.query.LessonQuery;
 import com.lecture.domain.entities.LessonDO;
 import com.lecture.infr.gateway.LessonGateway;
 import com.lecture.infr.gateway.RedisGateway;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
@@ -31,8 +29,6 @@ public class LessonApplicationService {
 
     @Autowired
     LessonGateway lessonGateway;
-
-
 
     /**
      * 学院所教授的课程
@@ -90,12 +86,7 @@ public class LessonApplicationService {
         });
     }
 
-    public List<LessonDO> getLessonsById(LessonQueryDTO lessonQueryDTO) {
-        if (Objects.equals(lessonQueryDTO.getSearchKey(), "major")) {
-            return getLessonsByMajorId(lessonQueryDTO.getId());
-        } else if (Objects.equals(lessonQueryDTO.getSearchKey(), "college")) {
-            return getLessonsByCollegeId(lessonQueryDTO.getId());
-        }
-        throw new BizException("错误的查询条件、请重新检查");
+    public List<LessonDO> queryLessons(LessonQuery lessonQuery) {
+        return lessonGateway.getLessonsByCondition(lessonQuery);
     }
 }

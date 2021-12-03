@@ -1,9 +1,8 @@
-package com.lecture.app.dto;
+package com.lecture.infr.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 /**
  * @className: LessonQueryDTO
@@ -14,11 +13,13 @@ import lombok.NonNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class LessonQueryDTO {
+public class LessonQuery {
 
-    @NonNull
-    private String searchKey;
+    private Integer campusId;
 
-    @NonNull
-    private Integer id;
+    private Integer collegeId;
+
+    private Integer majorId;
+
+    private Integer required;
 }
