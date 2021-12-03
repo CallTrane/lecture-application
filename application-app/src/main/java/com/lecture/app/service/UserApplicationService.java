@@ -6,7 +6,9 @@ import com.lecture.component.exception.Assert;
 import com.lecture.component.exception.BizException;
 import com.lecture.component.utils.BeanUtils;
 import com.lecture.component.utils.DataUtils;
+import com.lecture.domain.aggregates.student.StudentAggregate;
 import com.lecture.domain.aggregates.user.UserRepository;
+import com.lecture.domain.entities.StudentDO;
 import com.lecture.domain.entities.UserDO;
 import com.lecture.infr.gateway.RedisGateway;
 import com.lecture.infr.gateway.SystemGateway;
@@ -55,5 +57,9 @@ public class UserApplicationService {
             throw new BizException("用户信息有误，请重新输入登录");
         }
         return user;
+    }
+
+    public StudentAggregate getStudentLessons(StudentDO studentDO) {
+        return null;
     }
 }

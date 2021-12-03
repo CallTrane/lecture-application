@@ -12,14 +12,20 @@
             <if test="query.campusId != null">
                 and campus_id = #{query.campusId}
             </if>
+            <if test="query.required != null">
+                and required = #{query.required}
+            </if>
+            <if test="query.lessonName != null">
+                and name LIKE CONCAT('%',#{query.lessonName},'%')
+            </if>
+            <if test="query.teacherName != null">
+                and teacher_name LIKE CONCAT('%',#{query.teacherName},'%')
+            </if>
             <if test="query.collegeId != null">
                 and college_id = #{query.collegeId}
             </if>
             <if test="query.majorId != null">
                 and major_id = #{query.majorId}
-            </if>
-            <if test="query.required != null">
-                and required = #{query.required}
             </if>
         </where>
     </select>

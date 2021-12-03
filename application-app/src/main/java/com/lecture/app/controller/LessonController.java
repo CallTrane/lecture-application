@@ -4,7 +4,6 @@ import com.lecture.infr.query.LessonQuery;
 import com.lecture.app.service.LessonApplicationService;
 import com.lecture.domain.entities.LessonDO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,9 +26,9 @@ public class LessonController {
      * @param lessonQueryDTO
      * @return
      */
-    @GetMapping("/getById")
+    @GetMapping("/list")
     @ResponseBody
-    public List<LessonDO> getLessonsById(@RequestBody @Validated LessonQuery lessonQueryDTO) {
+    public List<LessonDO> getLessonsById(@RequestBody LessonQuery lessonQueryDTO) {
         return lessonApplicationService.queryLessons(lessonQueryDTO);
     }
 

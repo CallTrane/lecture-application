@@ -19,10 +19,10 @@ public class LessonApplicationServiceTest extends StartApplicationTest {
     @Test
     public void baseTest() {
         LessonQuery lessonQuery = new LessonQuery();
-        /*lessonQuery.setCampusId();
-        lessonQuery.setCollegeId();
-        lessonQuery.setMajorId();
-        lessonQuery.setRequired();*/
+        //lessonQuery.setCampusId(1);
+        //lessonQuery.setCollegeId();
+        //lessonQuery.setMajorId();
+        //lessonQuery.setRequired();
         applicationService.queryLessons(lessonQuery).forEach(System.out::println);
     }
 

@@ -51,9 +51,9 @@ public class LessonDO {
     private Integer majorId;
 
     /**
-     * 教师id
+     * 教师名字
      */
-    private Long tId;
+    private String teacherName;
 
     /**
      * 学年

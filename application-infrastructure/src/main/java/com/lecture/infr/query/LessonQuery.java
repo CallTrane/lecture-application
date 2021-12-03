@@ -15,11 +15,29 @@ import lombok.NoArgsConstructor;
 @Data
 public class LessonQuery {
 
+    /**
+     * 校区
+     */
     private Integer campusId;
+
+    /**
+     * 必修 / 选修
+     */
+    private Integer required;
+
+    /**
+     * 课程名称
+     */
+    private Integer lessonName;
+
+    /**
+     * 教师名字
+     */
+    private String teacherName;
 
     private Integer collegeId;
 
     private Integer majorId;
 
-    private Integer required;
+
 }

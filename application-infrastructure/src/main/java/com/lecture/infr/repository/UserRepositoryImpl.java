@@ -8,6 +8,7 @@ import com.lecture.infr.gateway.StudentGateway;
 import com.lecture.infr.gateway.TeacherGateway;
 import com.lecture.infr.gateway.UserGateway;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date: 2021/11/27 11:31
  * @author: Carl
  */
+@Service
 public class UserRepositoryImpl implements UserRepository {
 
     @Autowired
