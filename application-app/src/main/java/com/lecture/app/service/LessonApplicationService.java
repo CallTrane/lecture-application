@@ -108,8 +108,8 @@ public class LessonApplicationService {
         return result.stream().filter(lessonDO ->
                 StringUtils.contains(lessonDO.getTeacherName(), Optional.ofNullable(lessonQuery.getTeacherName()).orElse("")) &
                         StringUtils.contains(lessonDO.getName(), Optional.ofNullable(lessonQuery.getLessonName()).orElse("")) &
-                        (lessonQuery.getWeekday() == null || Optional.ofNullable(lessonQuery.getWeekday()).equals(lessonDO.getWeekday())) &
-                        (lessonQuery.getRequired() == null || Optional.ofNullable(lessonQuery.getRequired()).equals(lessonDO.getRequired()))
+                        (lessonQuery.getWeekday() == null || Objects.equals(lessonQuery.getWeekday(), lessonDO.getWeekday())) &
+                        (lessonQuery.getRequired() == null || Objects.equals(lessonQuery.getRequired(), lessonDO.getRequired()))
         ).collect(Collectors.toList());
     }
 
