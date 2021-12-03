@@ -34,7 +34,7 @@
     <select id="getLessonIdByStudentId" resultType="java.lang.Integer">
         select l_id
         from student_lesson
-        where delete_flag = 1 and stu_id = #{studentId}
+        where delete_flag = 0 and stu_id = #{studentId}
     </select>
 
     <insert id="selectLesson">
