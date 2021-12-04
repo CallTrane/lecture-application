@@ -8,10 +8,12 @@ import com.lecture.infr.query.LessonQuery;
 import com.lecture.domain.entities.LessonDO;
 import com.lecture.infr.gateway.LessonGateway;
 import com.lecture.infr.gateway.RedisGateway;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -49,21 +51,22 @@ public class LessonApplicationService {
         String lessonKey = LessonAssembler.generateLessonListKey(lessonQuery);
         Integer index = Optional.ofNullable(lessonQuery.getPageIndex()).orElse(1);
         Integer size = Optional.ofNullable(lessonQuery.getPageSize()).orElse(10);
-        List<LessonDO> result = Optional.ofNullable(redisGateway.getList(lessonKey, LessonDO.class)).orElseGet(() -> {
+        List<LessonDO> origin = Optional.ofNullable(redisGateway.getList(lessonKey, LessonDO.class)).orElseGet(() -> {
             List<LessonDO> value = lessonGateway.getLessonsByCondition(lessonQuery);
             redisGateway.set(lessonKey, value, 259200L);
             return value;
         });
-        return result.stream().filter(lessonDO ->
-                lessonDO.getMajorId().equals(lessonQuery.getMajorId()) & lessonDO.getCampusId().equals(lessonQuery.getCampusId()) &
+        return origin.stream().filter(lessonDO ->
                         StringUtils.contains(lessonDO.getTeacherName(), Optional.ofNullable(lessonQuery.getTeacherName()).orElse("")) &
                         StringUtils.contains(lessonDO.getName(), Optional.ofNullable(lessonQuery.getLessonName()).orElse("")) &
                         (lessonQuery.getWeekday() == null || Objects.equals(lessonQuery.getWeekday(), lessonDO.getWeekday())) &
+                        (lessonQuery.getMajorId() == null || Objects.equals(lessonQuery.getMajorId(), lessonDO.getMajorId())) &
+                        (lessonQuery.getCampusId() == null || Objects.equals(lessonQuery.getCampusId(), lessonDO.getCampusId())) &
                         (lessonQuery.getRequired() == null || Objects.equals(lessonQuery.getRequired(), lessonDO.getRequired()))
         ).map(l -> {
             Optional.ofNullable(redisGateway.get(LessonAssembler.generateLessonNumberKey(l.getLId()))).ifPresent(n -> l.setRemainPeople((Integer) n));
             return l;
-        }).collect(Collectors.toList()).subList((index - 1) * size, Math.min(index * size - 1, result.size() - 1));
+        }).skip((index - 1) * size).limit(index * size - 1).collect(Collectors.toList());
     }
 
     /**

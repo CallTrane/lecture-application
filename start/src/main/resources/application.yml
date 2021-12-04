@@ -15,9 +15,9 @@ spring:
     port: 6379
     lettuce:
       pool:
-        max-active: 2000
+        max-active: 3000
         max-wait: 3000ms
-        max-idle: 400
+        max-idle: 500
         min-idle: 20
         time-between-eviction-runs: 1s
 
@@ -27,6 +27,10 @@ spring:
     port: 5672
     username: admin
     password: admin
+    listener:
+      simple:
+        max-concurrency: 10
+        concurrency: 1
     # 确认消息发送到交换机上
     publisher-confirm-type: correlated
     # 确认消息已发送到队列
