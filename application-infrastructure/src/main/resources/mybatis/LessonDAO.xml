@@ -38,6 +38,12 @@
         where delete_flag = 0 and stu_id = #{studentId}
     </select>
 
+    <select id="getLessonCount" resultType="java.lang.Integer">
+        select COUNT(*)
+        from lesson
+        where closed = 0
+    </select>
+
     <insert id="selectLesson">
         INSERT
         INTO student_lesson(stu_id,l_id)

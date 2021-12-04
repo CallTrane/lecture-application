@@ -2,9 +2,11 @@ package com.lecture.infr.gateway.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lecture.component.utils.DataUtils;
+import com.lecture.domain.aggregates.lesson.LessonAggregate;
 import com.lecture.domain.entities.LessonDO;
 import com.lecture.infr.dao.LessonDAO;
 import com.lecture.infr.gateway.LessonGateway;
+import com.lecture.infr.gateway.RedisGateway;
 import com.lecture.infr.gateway.rabbitmq.mo.LessonMO;
 import com.lecture.infr.query.LessonQuery;
 import com.lecture.infr.gateway.rabbitmq.RabbitMQSender;
@@ -29,11 +31,19 @@ public class LessonGatewayImpl implements LessonGateway {
     private LessonDAO lessonDAO;
 
     @Autowired
-    RabbitMQSender rabbitMQSender;
+    private RedisGateway redisGateway;
+
+    @Autowired
+    private RabbitMQSender rabbitMQSender;
 
     @Override
     public List<LessonDO> getAllLesson() {
         return lessonDAO.selectList(null);
+    }
+
+    @Override
+    public Integer getLessonCount() {
+        return lessonDAO.getLessonCount();
     }
 
     @Override
@@ -85,8 +95,12 @@ public class LessonGatewayImpl implements LessonGateway {
     @Override
     public void closeLesson() {
         lessonDAO.closeLesson();
+
         LambdaQueryWrapper<LessonDO> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(LessonDO::getClosed, 1);
         lessonDAO.dropLessonByClose(lessonDAO.selectList(wrapper).stream().map(LessonDO::getLId).collect(Collectors.toList()));
+        LessonAggregate.allLessonsCount = getLessonCount();
+
+        redisGateway.removeKeyByPrefix("lesson:");
     }
 }

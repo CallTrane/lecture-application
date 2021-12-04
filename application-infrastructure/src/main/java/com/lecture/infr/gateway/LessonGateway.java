@@ -16,6 +16,8 @@ public interface LessonGateway {
 
     List<LessonDO> getAllLesson();
 
+    Integer getLessonCount();
+
     /**
      * 根据专业id获取课程
      *

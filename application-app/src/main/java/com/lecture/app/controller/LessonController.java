@@ -1,5 +1,6 @@
 package com.lecture.app.controller;
 
+import com.lecture.domain.aggregates.lesson.LessonAggregate;
 import com.lecture.infr.query.LessonQuery;
 import com.lecture.app.service.LessonApplicationService;
 import com.lecture.domain.entities.LessonDO;
@@ -33,4 +34,9 @@ public class LessonController {
         return lessonApplicationService.queryLessons(lessonQueryDTO);
     }
 
+    @GetMapping("/count")
+    @ResponseBody
+    public Integer getLessonCount() {
+        return LessonAggregate.allLessonsCount;
+    }
 }
