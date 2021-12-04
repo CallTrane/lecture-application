@@ -29,4 +29,6 @@ public interface LessonDAO extends BaseMapper<LessonDO> {
     void decrLesson(Integer lessonId);
 
     void incrLesson(Integer lessonId);
+
+    void dropLessonByClose(@Param("list") List<Integer> lessonIds);
 }

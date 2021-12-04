@@ -30,6 +30,7 @@
                 and major_id = #{query.majorId}
             </if>
         </where>
+        ORDER BY l_id
     </select>
     <select id="getLessonIdByStudentId" resultType="java.lang.Integer">
         select l_id
@@ -49,11 +50,6 @@
         WHERE stu_id = #{stuId} and l_id = #{lessonId}
     </update>
 
-    <update id="closeLesson">
-        UPDATE lesson
-        SET closed = 1
-        WHERE (total_people - remain_people) &lt; 20
-    </update>
 
     <update id="decrLesson">
         update lesson
@@ -65,6 +61,23 @@
         update lesson
         set remain_people = remain_people + 1
         where l_id = #{lessonId}
+    </update>
+
+    <update id="closeLesson">
+        UPDATE lesson
+        SET closed = 1
+        WHERE (total_people - remain_people) &lt; 20
+    </update>
+
+    <update id="dropLessonByClose">
+        UPDATE student_lesson
+        SET delete_flag = 1
+        <if test="list != null and list.size() > 0">
+            where l_id in
+            <foreach collection="list" open="(" close=")" item="id" separator=",">
+                #{id}
+            </foreach>
+        </if>
     </update>
 
 </mapper>

@@ -1,5 +1,6 @@
 package com.lecture.infr.query;
 
+import com.lecture.component.utils.DataUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,5 +48,13 @@ public class LessonQuery extends BaseQuery {
      */
     private Integer majorId;
 
+    /**
+     * 第几页
+     */
+    private Integer pageIndex;
 
+    /**
+     * 每页大小
+     */
+    private Integer pageSize;
 }

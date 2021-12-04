@@ -2,6 +2,7 @@ package com.lecture.app.service;
 
 import com.lecture.app.assembler.LessonAssembler;
 import com.lecture.component.exception.BizException;
+import com.lecture.infr.gateway.SystemGateway;
 import com.lecture.infr.gateway.rabbitmq.mo.LessonMO;
 import com.lecture.infr.query.LessonQuery;
 import com.lecture.domain.entities.LessonDO;
@@ -35,6 +36,9 @@ public class LessonApplicationService {
     @Autowired
     private LessonGateway lessonGateway;
 
+    @Autowired
+    private SystemGateway systemGateway;
+
     /**
      * 根据条件查询课程
      *
@@ -49,6 +53,7 @@ public class LessonApplicationService {
             return value;
         });
         return result.stream().filter(lessonDO ->
+                lessonDO.getMajorId().equals(lessonQuery.getMajorId()) & lessonDO.getCampusId().equals(lessonQuery.getCampusId()) &
                 StringUtils.contains(lessonDO.getTeacherName(), Optional.ofNullable(lessonQuery.getTeacherName()).orElse("")) &
                         StringUtils.contains(lessonDO.getName(), Optional.ofNullable(lessonQuery.getLessonName()).orElse("")) &
                         (lessonQuery.getWeekday() == null || Objects.equals(lessonQuery.getWeekday(), lessonDO.getWeekday())) &
@@ -56,7 +61,7 @@ public class LessonApplicationService {
         ).map(l -> {
             Optional.ofNullable(redisGateway.get(LessonAssembler.generateLessonNumberKey(l.getLId()))).ifPresent(n -> l.setRemainPeople((Integer) n));
             return l;
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList()).subList((lessonQuery.getPageIndex()-1) * lessonQuery.getPageIndex(), lessonQuery.getPageIndex() * lessonQuery.getPageSize());
     }
 
     /**
@@ -93,11 +98,7 @@ public class LessonApplicationService {
      * 清除redis所有key，同时将所有课程信息剩余人数预热到redis缓存中
      */
     public void preheatLessonNumber() {
-        redisGateway.removeKeyByPrefix("");
-        lessonGateway.getAllLesson().stream().filter(l -> l.getClosed().equals(0)).forEach(lessonDO ->
-            // 过期时间是3天
-            redisGateway.set(LessonAssembler.generateLessonNumberKey(lessonDO.getLId()), lessonDO.getRemainPeople(), 259200L)
-        );
+        systemGateway.preheatLessonNumber(LessonAssembler.generateLessonNumberKey(null));
     }
 
     /**

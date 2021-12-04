@@ -17,4 +17,11 @@ public interface SystemGateway {
     Map<Integer, String> getCollegeMap();
 
     Map<Integer, String> campusMap();
+
+    /**
+     * 清除所有数据，并数据预热
+     *
+     * @param prefixKey
+     */
+    void preheatLessonNumber(String prefixKey);
 }

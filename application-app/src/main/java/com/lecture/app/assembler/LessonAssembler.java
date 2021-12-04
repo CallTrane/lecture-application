@@ -14,39 +14,27 @@ public class LessonAssembler {
     public static final String LESSON_PREFIX_KEY = "lesson:";
 
     public static String generateLessonListKey(LessonQuery lessonQuery) {
-        String key = LESSON_PREFIX_KEY;
-        Integer majorId = lessonQuery.getMajorId();
-        Integer campusId = lessonQuery.getCampusId();
-        Integer required = lessonQuery.getRequired();
-        if (DataUtils.isNotEmpty(majorId)) {
-            key += ("major" + majorId);
-        }
-        if (DataUtils.isNotEmpty(campusId)) {
-            key += ("campus" + campusId);
-        }
-        /*if (DataUtils.isNotEmpty(required)) {
-            key += (required);
-        }*/
+        String key = LESSON_PREFIX_KEY + "all";
         return key;
     }
 
     public static String generateStudentLessonKey(Long stuId) {
-        String key = LESSON_PREFIX_KEY + "student_lesson";
+        String key = LESSON_PREFIX_KEY + "student_lesson:";
         return key + stuId;
     }
 
     public static String genereteTeacherLessonKey(Long teacherId) {
-        String key = LESSON_PREFIX_KEY + "teacher_lesson";
+        String key = LESSON_PREFIX_KEY + "teacher_lesson:";
         return key + teacherId;
     }
 
     public static String generateLessonNumberKey(Integer lessonId) {
-        String key = LESSON_PREFIX_KEY + "lesson_remain";
+        String key = LESSON_PREFIX_KEY + "lesson_remain:";
         return key + lessonId;
     }
 
     public static String generateLessonKey(Integer lessonId) {
-        String key = LESSON_PREFIX_KEY + "id";
+        String key = LESSON_PREFIX_KEY + "id:";
         return key + lessonId;
     }
 

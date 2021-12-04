@@ -1,7 +1,6 @@
 package com.lecture.infr.gateway.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lecture.component.utils.DataUtils;
 import com.lecture.domain.entities.LessonDO;
 import com.lecture.infr.dao.LessonDAO;
@@ -11,11 +10,10 @@ import com.lecture.infr.query.LessonQuery;
 import com.lecture.infr.gateway.rabbitmq.RabbitMQSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -83,8 +81,12 @@ public class LessonGatewayImpl implements LessonGateway {
         rabbitMQSender.sendDropLessonMessage(lessonMO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void closeLesson() {
         lessonDAO.closeLesson();
+        LambdaQueryWrapper<LessonDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(LessonDO::getClosed, 1);
+        lessonDAO.dropLessonByClose(lessonDAO.selectList(wrapper).stream().map(LessonDO::getLId).collect(Collectors.toList()));
     }
 }

@@ -5,6 +5,8 @@ import com.lecture.domain.entities.CampusDO;
 import com.lecture.domain.entities.CollegeMajorDO;
 import com.lecture.infr.dao.CampusDAO;
 import com.lecture.infr.dao.CollegeMajorDAO;
+import com.lecture.infr.gateway.LessonGateway;
+import com.lecture.infr.gateway.RedisGateway;
 import com.lecture.infr.gateway.SystemGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,12 @@ public class SystemGatewayImpl implements SystemGateway {
     @Autowired
     CollegeMajorDAO collegeMajorDAO;
 
+    @Autowired
+    RedisGateway redisGateway;
+
+    @Autowired
+    LessonGateway lessonGateway;
+
     @Override
     public Map<Integer, Map<Integer, CollegeMajorDO>> getCollegeMajorMap() {
         QueryWrapper<CollegeMajorDO> wrapper = new QueryWrapper<>();
@@ -47,5 +55,14 @@ public class SystemGatewayImpl implements SystemGateway {
     public Map<Integer, String> campusMap() {
         QueryWrapper<CampusDO> wrapper= new QueryWrapper<>();
         return campusDAO.selectList(wrapper).stream().collect(Collectors.toMap(CampusDO::getCampusId, CampusDO::getName));
+    }
+
+    @Override
+    public void preheatLessonNumber(String prefixKey) {
+        redisGateway.removeKeyByPrefix("");
+        lessonGateway.getAllLesson().stream().filter(l -> l.getClosed().equals(0)).forEach(lessonDO ->
+            // 过期时间是3天
+            redisGateway.set(prefixKey + lessonDO.getLId(), lessonDO.getRemainPeople(), 259200L)
+        );
     }
 }
