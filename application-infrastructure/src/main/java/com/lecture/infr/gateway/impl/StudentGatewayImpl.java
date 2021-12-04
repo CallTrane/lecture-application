@@ -1,15 +1,11 @@
 package com.lecture.infr.gateway.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lecture.domain.entities.StudentDO;
 import com.lecture.infr.dao.StudentDAO;
 import com.lecture.infr.gateway.StudentGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @classname: StudentGatewayImpl
@@ -26,11 +22,6 @@ public class StudentGatewayImpl implements StudentGateway {
     @Override
     public void registerStudent(StudentDO studentDO) {
         studentDAO.insert(studentDO);
-    }
-
-    @Override
-    public List<Integer> getLessonIds(Long studentId) {
-        return studentDAO.getLessonIdsByStuId(studentId);
     }
 
     @Override

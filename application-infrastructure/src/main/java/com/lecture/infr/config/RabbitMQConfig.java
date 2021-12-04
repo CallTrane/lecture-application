@@ -20,11 +20,13 @@ public class RabbitMQConfig {
 
     public static final String SELECT_LESSON_QUEUE = "SELECT_LESSON_QUEUE";
     public static final String SELECT_LESSON_KEY = "SELECT_LESSON_KEY";
+    public static final String SELECT_LESSON_EXCHANGE = "LESSON_EXCHANGE";
 
     public static final String DROP_LESSON_QUEUE = "DROP_LESSON_QUEUE";
     public static final String DROP_LESSON_KEY = "DROP_LESSON_KEY";
+    public static final String DROP_LESSON_EXCHANGE = "DROP_LESSON_EXCHANGE";
 
-    public static final String LESSON_EXCHANGE = "LESSON_EXCHANGE";
+
 
     /**
      * 队列
@@ -47,20 +49,22 @@ public class RabbitMQConfig {
      * 直连交换机
      * @return
      */
-    @Bean
-    public DirectExchange directExchange() {
-        return new DirectExchange(LESSON_EXCHANGE, true, false);
-    }
+     @Bean
+     public DirectExchange selectLessonExchange() {
+     return new DirectExchange(SELECT_LESSON_EXCHANGE, true, false);
+     }
 
     @Bean
-    public Binding selectLessonBinding() {
-        return BindingBuilder.bind(selectLessonQueue()).to(directExchange()).with(SELECT_LESSON_KEY);
+    public DirectExchange dropLessonExchange() {
+        return new DirectExchange(DROP_LESSON_EXCHANGE, true, false);
     }
 
-    @Bean
-    public Binding dropLessonBinding() {
-        return BindingBuilder.bind(selectLessonQueue()).to(directExchange()).with(DROP_LESSON_KEY);
-    }
+     @Bean public Binding selectLessonBinding() {
+     return BindingBuilder.bind(selectLessonQueue()).to(selectLessonExchange()).with(SELECT_LESSON_KEY);
+     }
 
+     @Bean public Binding dropLessonBinding() {
+     return BindingBuilder.bind(dropLessonQueue()).to(dropLessonExchange()).with(DROP_LESSON_KEY);
+     }
 
 }

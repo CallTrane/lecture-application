@@ -7,7 +7,7 @@
         SELECT *
         FROM lesson
         <where>
-            true
+            closed = 0
             <if test="query.campusId != null">
                 and campus_id = #{query.campusId}
             </if>
@@ -47,6 +47,12 @@
         UPDATE student_lesson
         SET delete_flag = 1
         WHERE stu_id = #{stuId} and l_id = #{lessonId}
+    </update>
+
+    <update id="closeLesson">
+        UPDATE lesson
+        SET closed = 1
+        WHERE (total_people - remain_people) &lt; 20
     </update>
 
 </mapper>

@@ -23,7 +23,7 @@ public class TeacherController {
     @Autowired
     LessonApplicationService lessonApplicationService;
 
-    @PostMapping("/lesson")
+    @PostMapping("/get_lesson")
     public List<LessonDO> getLessonsByTeacherId(@RequestParam Long teacherId) {
         return lessonApplicationService.getLessonsByTeacherId(teacherId);
     }

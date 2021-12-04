@@ -94,7 +94,7 @@ public class LessonApplicationService {
      */
     public void preheatLessonNumber() {
         redisGateway.removeKeyByPrefix("");
-        lessonGateway.getAllLessons().forEach(lessonDO ->
+        lessonGateway.getAllLesson().stream().filter(l -> l.getClosed().equals(0)).forEach(lessonDO ->
             // 过期时间是3天
             redisGateway.set(LessonAssembler.generateLessonNumberKey(lessonDO.getLId()), lessonDO.getRemainPeople(), 259200L)
         );
@@ -131,5 +131,9 @@ public class LessonApplicationService {
             throw new BizException("非法的课程id");
         }
         lessonGateway.dropLesson(new LessonMO(key, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
+    }
+
+    public void closeLesson() {
+        lessonGateway.closeLesson();
     }
 }

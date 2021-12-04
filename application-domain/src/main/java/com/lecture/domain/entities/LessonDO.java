@@ -89,4 +89,9 @@ public class LessonDO {
      * 校区id
      */
     private Integer campusId;
+
+    /**
+     * 是否关班
+     */
+    private Integer closed;
 }

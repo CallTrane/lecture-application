@@ -48,4 +48,10 @@ public class SystemController {
         lessonApplicationService.preheatLessonNumber();
         return ActionEnum.SUCCESS;
     }
+
+    @GetMapping("/close")
+    public ActionEnum closeLesson() {
+        lessonApplicationService.closeLesson();
+        return ActionEnum.SUCCESS;
+    }
 }

@@ -5,8 +5,6 @@ import com.lecture.infr.gateway.rabbitmq.mo.LessonMO;
 import com.lecture.infr.query.LessonQuery;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * @className: LessonGateway
@@ -16,21 +14,7 @@ import java.util.Optional;
  */
 public interface LessonGateway {
 
-    List<LessonDO> getAllLessons();
-
-    /**
-     * 获取学院对应课程
-     *
-     * @return
-     */
-    Map<Integer, List<LessonDO>> getCollegeLessonsMap();
-
-    /**
-     * 获取专业对应课程
-     *
-     * @return
-     */
-    Map<Integer, List<LessonDO>> getMajorLessonsMap();
+    List<LessonDO> getAllLesson();
 
     /**
      * 根据专业id获取课程
@@ -43,8 +27,6 @@ public interface LessonGateway {
     List<LessonDO> getLessonsByCollegeId(Integer collegeId);
 
     List<LessonDO> getLessonsByCondition(LessonQuery lessonQuery);
-
-    Optional<List<LessonDO>> getLessonsByIds(List<Integer> ids);
 
     /**
      * 根据学生id查询课程信息
@@ -71,4 +53,6 @@ public interface LessonGateway {
      * 学生退课
      */
     void dropLesson(LessonMO lessonMO);
+
+    void closeLesson();
 }

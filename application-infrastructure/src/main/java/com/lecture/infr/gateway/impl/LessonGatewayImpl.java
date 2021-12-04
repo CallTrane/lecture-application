@@ -33,54 +33,28 @@ public class LessonGatewayImpl implements LessonGateway {
     @Autowired
     RabbitMQSender rabbitMQSender;
 
-    /**
-     * 查询所有课程
-     *
-     * @return
-     */
-    private List<LessonDO> getAllLesson() {
-        QueryWrapper<LessonDO> wrapper = new QueryWrapper<>();
-        return lessonDAO.selectList(wrapper);
-    }
-
-
     @Override
-    public List<LessonDO> getAllLessons() {
+    public List<LessonDO> getAllLesson() {
         return lessonDAO.selectList(null);
-    }
-
-    @Override
-    public Map<Integer, List<LessonDO>> getCollegeLessonsMap() {
-        return getAllLesson().stream().collect(Collectors.groupingBy(LessonDO::getCollegeId));
-    }
-
-    @Override
-    public Map<Integer, List<LessonDO>> getMajorLessonsMap() {
-        return getAllLesson().stream().collect(Collectors.groupingBy(LessonDO::getMajorId));
     }
 
     @Override
     public List<LessonDO> getLessonsByMajorId(Integer majorId) {
         LambdaQueryWrapper<LessonDO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(LessonDO::getMajorId, majorId);
+        wrapper.eq(LessonDO::getMajorId, majorId).eq(LessonDO::getClosed, 0);
         return lessonDAO.selectList(wrapper);
     }
 
     @Override
     public List<LessonDO> getLessonsByCollegeId(Integer collegeId) {
         LambdaQueryWrapper<LessonDO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(LessonDO::getCollegeId, collegeId);
+        wrapper.eq(LessonDO::getCollegeId, collegeId).eq(LessonDO::getClosed, 0);
         return lessonDAO.selectList(wrapper);
     }
 
     @Override
     public List<LessonDO> getLessonsByCondition(LessonQuery lessonQuery) {
         return lessonDAO.getLessonsByCondition(lessonQuery);
-    }
-
-    @Override
-    public Optional<List<LessonDO>> getLessonsByIds(List<Integer> ids) {
-        return Optional.ofNullable(lessonDAO.selectBatchIds(ids));
     }
 
     @Override
@@ -95,7 +69,7 @@ public class LessonGatewayImpl implements LessonGateway {
     @Override
     public List<LessonDO> getLessonsByTeacherId(Long teacherId) {
         LambdaQueryWrapper<LessonDO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(LessonDO::getTId, teacherId);
+        wrapper.eq(LessonDO::getTId, teacherId).eq(LessonDO::getClosed, 0);
         return lessonDAO.selectList(wrapper);
     }
 
@@ -107,5 +81,10 @@ public class LessonGatewayImpl implements LessonGateway {
     @Override
     public void dropLesson(LessonMO lessonMO) {
         rabbitMQSender.sendDropLessonMessage(lessonMO);
+    }
+
+    @Override
+    public void closeLesson() {
+        lessonDAO.closeLesson();
     }
 }

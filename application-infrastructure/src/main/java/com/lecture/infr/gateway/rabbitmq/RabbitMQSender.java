@@ -19,11 +19,11 @@ public class RabbitMQSender {
     private RabbitTemplate rabbitTemplate;
 
     public void sendSelectLessonMessage(LessonMO lessonMO) {
-        rabbitTemplate.convertAndSend(RabbitMQConfig.LESSON_EXCHANGE, RabbitMQConfig.SELECT_LESSON_KEY, lessonMO);
+        rabbitTemplate.convertAndSend(RabbitMQConfig.SELECT_LESSON_EXCHANGE, RabbitMQConfig.SELECT_LESSON_KEY, lessonMO);
     }
 
     public void sendDropLessonMessage(LessonMO lessonMO) {
-        rabbitTemplate.convertAndSend(RabbitMQConfig.LESSON_EXCHANGE, RabbitMQConfig.DROP_LESSON_KEY, lessonMO);
+        rabbitTemplate.convertAndSend(RabbitMQConfig.DROP_LESSON_EXCHANGE, RabbitMQConfig.DROP_LESSON_KEY, lessonMO);
     }
 
 }

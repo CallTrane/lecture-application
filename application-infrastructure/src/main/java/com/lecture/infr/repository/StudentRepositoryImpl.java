@@ -32,16 +32,6 @@ public class StudentRepositoryImpl implements StudentRepository {
     @Autowired
     LessonGateway lessonGateway;
 
-    @Override
-    public List<LessonDO> getLessons(Long studentId) {
-        List<Integer> ids = studentGateway.getLessonIds(studentId);
-        return lessonGateway.getLessonsByIds(ids).orElseGet(() -> {
-            log.info("学生{} 查询不到课程", studentId);
-            return Lists.newArrayList();
-        });
-    }
-
-    @Override
     public List<TeacherDO> getTeachers(List<Long> teacherIds) {
         return teacherGateway.getTeachersByIds(teacherIds).get();
     }

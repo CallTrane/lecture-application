@@ -58,6 +58,10 @@ server:
       max: 300
       min-spare: 40
 
+#
+logging:
+  level:
+    com.lecture.infr.dao: DEBUG
 
 
 

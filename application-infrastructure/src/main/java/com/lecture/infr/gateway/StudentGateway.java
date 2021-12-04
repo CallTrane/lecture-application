@@ -15,13 +15,5 @@ public interface StudentGateway {
 
     void registerStudent(StudentDO studentDO);
 
-    /**
-     * 查询所有
-     *
-     * @param studentId
-     * @return
-     */
-    List<Integer> getLessonIds(Long studentId);
-
     StudentDO getStudentByUid(Integer uid);
 }

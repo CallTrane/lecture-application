@@ -36,13 +36,5 @@ public class StudentAggregate {
 
     private Map<Long, TeacherDO> teacherDOMap;
 
-    public StudentAggregate getStudentLessons(StudentDO studentDO) {
-        List<LessonDO> lessonDOs = studentRepository.getLessons(studentDO.getStuId());
-        //List<Long> teacherIds = lessonDOs.stream().map(LessonDO::getTId).collect(Collectors.toList());
-        //this.teacherDOMap = studentRepository.getTeachers(teacherIds).stream().collect(Collectors.toMap(TeacherDO::getTId, Function.identity()));
-        this.lessonDOs = lessonDOs;
-        this.studentDO = studentDO;
-        return this;
-    }
 
 }
