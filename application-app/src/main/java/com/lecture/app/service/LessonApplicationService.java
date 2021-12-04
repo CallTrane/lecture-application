@@ -66,7 +66,7 @@ public class LessonApplicationService {
         ).map(l -> {
             Optional.ofNullable(redisGateway.get(LessonAssembler.generateLessonNumberKey(l.getLId()))).ifPresent(n -> l.setRemainPeople((Integer) n));
             return l;
-        }).skip((index - 1) * size).limit(index * size).collect(Collectors.toList());
+        }).skip((index - 1) * size).limit(size).collect(Collectors.toList());
     }
 
     /**
