@@ -12,7 +12,7 @@ import javax.xml.crypto.Data;
  * @date: 2021/12/3 1:03
  */
 public class LessonAssembler {
-    public static String getRedisKey(LessonQuery lessonQuery) {
+    public static String generateLessonListKey(LessonQuery lessonQuery) {
         String key = "lesson:";
         Integer majorId = lessonQuery.getMajorId();
         Integer campusId = lessonQuery.getCampusId();
@@ -29,7 +29,16 @@ public class LessonAssembler {
         return key;
     }
 
-    public static String getRedisKey(Long stuId) {
+    public static String generateStudentLessonKey(Long stuId) {
         return "student_lesson:" + stuId;
     }
+
+    public static String generateLessonNumberKey(Integer lessonId) {
+        return "number_of_lesson:" + lessonId;
+    }
+
+    public static String generateLessonKey(Integer lessonId) {
+        return "lesson:" + lessonId;
+    }
+
 }

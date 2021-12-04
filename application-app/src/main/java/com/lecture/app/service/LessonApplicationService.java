@@ -1,7 +1,7 @@
 package com.lecture.app.service;
 
 import com.lecture.app.assembler.LessonAssembler;
-import com.lecture.component.utils.DataUtils;
+import com.lecture.component.exception.BizException;
 import com.lecture.infr.query.LessonQuery;
 import com.lecture.domain.entities.LessonDO;
 import com.lecture.infr.gateway.LessonGateway;
@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,7 +34,7 @@ public class LessonApplicationService {
     private RedisGateway redisGateway;
 
     @Autowired
-    LessonGateway lessonGateway;
+    private LessonGateway lessonGateway;
 
     /**
      * 学院所教授的课程
@@ -99,7 +99,7 @@ public class LessonApplicationService {
      * @return
      */
     public List<LessonDO> queryLessons(LessonQuery lessonQuery) {
-        String lessonKey = LessonAssembler.getRedisKey(lessonQuery);
+        String lessonKey = LessonAssembler.generateLessonListKey(lessonQuery);
         List<LessonDO> result = Optional.ofNullable(redisGateway.getList(lessonKey, LessonDO.class)).orElseGet(() -> {
             List<LessonDO> value = lessonGateway.getLessonsByCondition(lessonQuery);
             redisGateway.set(lessonKey, value);
@@ -110,7 +110,10 @@ public class LessonApplicationService {
                         StringUtils.contains(lessonDO.getName(), Optional.ofNullable(lessonQuery.getLessonName()).orElse("")) &
                         (lessonQuery.getWeekday() == null || Objects.equals(lessonQuery.getWeekday(), lessonDO.getWeekday())) &
                         (lessonQuery.getRequired() == null || Objects.equals(lessonQuery.getRequired(), lessonDO.getRequired()))
-        ).collect(Collectors.toList());
+        ).map(l -> {
+            Optional.ofNullable(redisGateway.get(LessonAssembler.generateLessonNumberKey(l.getLId()))).ifPresent(n -> l.setRemainPeople((Integer) n));
+            return l;
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -120,12 +123,21 @@ public class LessonApplicationService {
      * @return
      */
     public List<LessonDO> getLessonsByStuId(Long stuId) {
-        String key = LessonAssembler.getRedisKey(stuId);
+        String key = LessonAssembler.generateStudentLessonKey(stuId);
         return Optional.ofNullable(redisGateway.getList(key, LessonDO.class)).orElseGet(() -> {
             List<LessonDO> result = lessonGateway.getLessonsByStuId(stuId);
             redisGateway.set(key, result);
             return result;
         });
+    }
+
+    /**
+     * 将所有课程信息剩余人数预热到redis缓存中
+     */
+    public void preheatLessonNumber() {
+        lessonGateway.getAllLessons().forEach(lessonDO ->
+            redisGateway.set(LessonAssembler.generateLessonNumberKey(lessonDO.getLId()), lessonDO.getRemainPeople())
+        );
     }
 
     /**
@@ -135,7 +147,19 @@ public class LessonApplicationService {
      * @param stuId
      */
     public void selectLesson(Integer lessonId, Long stuId) {
-        lessonGateway.selectLesson(lessonId, stuId);
+        String key = LessonAssembler.generateLessonNumberKey(lessonId);
+        Optional.ofNullable((Integer)redisGateway.get(key)).ifPresentOrElse(number -> {
+            if (number <= 0) {
+                throw new BizException("选课人数已满、请重新选择");
+            }
+            if (getLessonsByStuId(stuId).stream().anyMatch(sl -> sl.getLId().equals(lessonId))){
+                throw new BizException("该学生已选过该课程");
+            }
+            // todo:这个操作用MQ，学生成功选课后应该刷新学生个人课程信息缓存
+            lessonGateway.selectLesson(lessonId, stuId);
+            redisGateway.decr(key);
+            redisGateway.remove(LessonAssembler.generateStudentLessonKey(stuId));
+        }, () -> { throw new BizException("找不到当前课程、请联系教务处处理"); });
     }
 
     /**
@@ -145,6 +169,13 @@ public class LessonApplicationService {
      * @param stuId
      */
     public void dropLesson(Integer lessonId, Long stuId) {
+        String key = LessonAssembler.generateLessonNumberKey(lessonId);
+        if (!redisGateway.exists(key)) {
+            throw new BizException("非法的课程id");
+        }
+        // todo:这个操作用MQ，学生成功退课后应该刷新学生个人课程信息缓存
         lessonGateway.dropLesson(lessonId, stuId);
+        redisGateway.incr(key);
     }
+
 }

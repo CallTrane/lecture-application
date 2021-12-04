@@ -25,7 +25,7 @@ import java.util.Optional;
 @NoArgsConstructor
 public class UserAggregate {
 
-    public static Map<Integer, Map<Integer, CollegeMajorDO>> collegeMajorMap = new HashMap<>();
+    public static Map<Integer, Map<Integer, CollegeMajorDO>> collegeMajorMap = new HashMap<>(4);
 
     public static Map<Integer, CollegeMajorDO> collegeMap = new HashMap<>();
 

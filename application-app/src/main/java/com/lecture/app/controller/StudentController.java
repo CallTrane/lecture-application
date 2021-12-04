@@ -34,12 +34,26 @@ public class StudentController {
         return lessonApplicationService.getLessonsByStuId(stuId);
     }
 
+    /**
+     * 选课
+     *
+     * @param lessonId
+     * @param stuId
+     * @return
+     */
     @PostMapping("/select_lesson")
     public ActionEnum selectLesson(@RequestParam Integer lessonId, @RequestParam Long stuId) {
         lessonApplicationService.selectLesson(lessonId, stuId);
         return ActionEnum.SUCCESS;
     }
 
+    /**
+     * 退课
+     *
+     * @param lessonId
+     * @param stuId
+     * @return
+     */
     @PostMapping("/drop_lesson")
     public ActionEnum dropLesson(@RequestParam Integer lessonId, @RequestParam Long stuId) {
         lessonApplicationService.dropLesson(lessonId, stuId);

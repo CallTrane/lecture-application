@@ -129,4 +129,8 @@ public interface RedisGateway {
      * @return
      */
     Set<Object> rangeByScore(String key, double scoure, double scoure1);
+
+    Long incr(String key);
+
+    Long decr(String key);
 }

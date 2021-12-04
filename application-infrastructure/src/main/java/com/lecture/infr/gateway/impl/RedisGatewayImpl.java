@@ -249,4 +249,26 @@ public class RedisGatewayImpl implements RedisGateway {
         ZSetOperations<String, Object> zset = redisTemplate.opsForZSet();
         return zset.rangeByScore(key, scoure, scoure1);
     }
+
+    /**
+     * 自增 +1
+     *
+     * @param key
+     * @return
+     */
+    @Override
+    public Long incr(String key) {
+        return redisTemplate.opsForValue().increment(key);
+    }
+
+    /**
+     * 自减 -1
+     *
+     * @param key
+     * @return
+     */
+    @Override
+    public Long decr(String key) {
+        return redisTemplate.opsForValue().decrement(key);
+    }
 }
