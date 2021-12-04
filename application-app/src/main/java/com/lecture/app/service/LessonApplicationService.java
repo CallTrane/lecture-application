@@ -47,6 +47,9 @@ public class LessonApplicationService {
      */
     public List<LessonDO> queryLessons(LessonQuery lessonQuery) {
         String lessonKey = LessonAssembler.generateLessonListKey(lessonQuery);
+        Integer index = Optional.ofNullable(lessonQuery.getPageIndex()).orElse(1);
+        Integer size = Optional.ofNullable(lessonQuery.getPageSize()).orElse(10);
+
         List<LessonDO> result = Optional.ofNullable(redisGateway.getList(lessonKey, LessonDO.class)).orElseGet(() -> {
             List<LessonDO> value = lessonGateway.getLessonsByCondition(lessonQuery);
             redisGateway.set(lessonKey, value, 259200L);
@@ -61,7 +64,7 @@ public class LessonApplicationService {
         ).map(l -> {
             Optional.ofNullable(redisGateway.get(LessonAssembler.generateLessonNumberKey(l.getLId()))).ifPresent(n -> l.setRemainPeople((Integer) n));
             return l;
-        }).collect(Collectors.toList()).subList((lessonQuery.getPageIndex()-1) * lessonQuery.getPageIndex(), lessonQuery.getPageIndex() * lessonQuery.getPageSize());
+        }).collect(Collectors.toList()).subList((index - 1) * index, index * size);
     }
 
     /**
