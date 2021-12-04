@@ -55,4 +55,16 @@
         WHERE (total_people - remain_people) &lt; 20
     </update>
 
+    <update id="decrLesson">
+        update lesson
+        set remain_people = remain_people - 1
+        where l_id = #{lessonId}
+    </update>
+
+    <update id="incrLesson">
+        update lesson
+        set remain_people = remain_people + 1
+        where l_id = #{lessonId}
+    </update>
+
 </mapper>
