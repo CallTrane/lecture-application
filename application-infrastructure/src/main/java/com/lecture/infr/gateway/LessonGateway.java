@@ -1,6 +1,7 @@
 package com.lecture.infr.gateway;
 
 import com.lecture.domain.entities.LessonDO;
+import com.lecture.infr.gateway.rabbitmq.mo.LessonMO;
 import com.lecture.infr.query.LessonQuery;
 
 import java.util.List;
@@ -54,18 +55,20 @@ public interface LessonGateway {
     List<LessonDO> getLessonsByStuId(Long stuId);
 
     /**
-     * 学生选课
+     * 根据教师工号查询课程信息
      *
-     * @param lessonId
-     * @param stuId
+     * @param teacherId
+     * @return
      */
-    void selectLesson(Integer lessonId, Long stuId);
+    List<LessonDO> getLessonsByTeacherId(Long teacherId);
+
+    /**
+     * 学生选课
+     */
+    void selectLesson(LessonMO lessonMO);
 
     /**
      * 学生退课
-     *
-     * @param lessonId
-     * @param stuId
      */
-    void dropLesson(Integer lessonId, Long stuId);
+    void dropLesson(LessonMO lessonMO);
 }

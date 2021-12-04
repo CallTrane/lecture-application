@@ -35,6 +35,11 @@ public class LessonAssembler {
         return key + stuId;
     }
 
+    public static String genereteTeacherLessonKey(Long teacherId) {
+        String key = LESSON_PREFIX_KEY + "teacher_lesson";
+        return key + teacherId;
+    }
+
     public static String generateLessonNumberKey(Integer lessonId) {
         String key = LESSON_PREFIX_KEY + "lesson_remain";
         return key + lessonId;

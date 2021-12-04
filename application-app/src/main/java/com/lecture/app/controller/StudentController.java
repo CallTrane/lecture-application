@@ -28,7 +28,7 @@ public class StudentController {
     @Autowired
     LessonApplicationService lessonApplicationService;
 
-    @GetMapping("/get_lessons")
+    @GetMapping("/get_lesson")
     @ResponseBody
     public List<LessonDO> getByStuId(@RequestParam Long stuId) {
         return lessonApplicationService.getLessonsByStuId(stuId);

@@ -51,6 +51,11 @@ public class LessonDO {
     private Integer majorId;
 
     /**
+     * 教师工号
+     */
+    private Long tId;
+
+    /**
      * 教师名字
      */
     private String teacherName;

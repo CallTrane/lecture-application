@@ -6,8 +6,9 @@ import com.lecture.component.utils.DataUtils;
 import com.lecture.domain.entities.LessonDO;
 import com.lecture.infr.dao.LessonDAO;
 import com.lecture.infr.gateway.LessonGateway;
+import com.lecture.infr.gateway.rabbitmq.mo.LessonMO;
 import com.lecture.infr.query.LessonQuery;
-import org.apache.commons.collections4.ListUtils;
+import com.lecture.infr.gateway.rabbitmq.RabbitMQSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,9 @@ public class LessonGatewayImpl implements LessonGateway {
 
     @Autowired
     private LessonDAO lessonDAO;
+
+    @Autowired
+    RabbitMQSender rabbitMQSender;
 
     /**
      * 查询所有课程
@@ -89,12 +93,19 @@ public class LessonGatewayImpl implements LessonGateway {
     }
 
     @Override
-    public void selectLesson(Integer lessonId, Long stuId) {
-        lessonDAO.selectLesson(lessonId, stuId);
+    public List<LessonDO> getLessonsByTeacherId(Long teacherId) {
+        LambdaQueryWrapper<LessonDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(LessonDO::getTId, teacherId);
+        return lessonDAO.selectList(wrapper);
     }
 
     @Override
-    public void dropLesson(Integer lessonId, Long stuId) {
-        lessonDAO.dropLesson(lessonId, stuId);
+    public void selectLesson(LessonMO lessonMO) {
+        rabbitMQSender.sendSelectLessonMessage(lessonMO);
+    }
+
+    @Override
+    public void dropLesson(LessonMO lessonMO) {
+        rabbitMQSender.sendDropLessonMessage(lessonMO);
     }
 }

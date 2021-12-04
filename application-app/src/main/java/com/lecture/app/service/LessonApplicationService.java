@@ -2,6 +2,7 @@ package com.lecture.app.service;
 
 import com.lecture.app.assembler.LessonAssembler;
 import com.lecture.component.exception.BizException;
+import com.lecture.infr.gateway.rabbitmq.mo.LessonMO;
 import com.lecture.infr.query.LessonQuery;
 import com.lecture.domain.entities.LessonDO;
 import com.lecture.infr.gateway.LessonGateway;
@@ -74,6 +75,21 @@ public class LessonApplicationService {
     }
 
     /**
+     * 获取教师所教的课程
+     *
+     * @param tId
+     * @return
+     */
+    public List<LessonDO> getLessonsByTeacherId(Long tId) {
+        String key = LessonAssembler.genereteTeacherLessonKey(tId);
+        return Optional.ofNullable(redisGateway.getList(key, LessonDO.class)).orElseGet(() -> {
+            List<LessonDO> result = lessonGateway.getLessonsByTeacherId(tId);
+            redisGateway.set(key, result, 86400L);
+            return result;
+        });
+    }
+
+    /**
      * 清除redis所有key，同时将所有课程信息剩余人数预热到redis缓存中
      */
     public void preheatLessonNumber() {
@@ -99,10 +115,7 @@ public class LessonApplicationService {
             if (getLessonsByStuId(stuId).stream().anyMatch(sl -> sl.getLId().equals(lessonId))){
                 throw new BizException("该学生已选过该课程");
             }
-            // todo:这个操作用MQ，学生成功选课后应该刷新学生个人课程信息缓存
-            lessonGateway.selectLesson(lessonId, stuId);
-            redisGateway.decr(key);
-            redisGateway.remove(LessonAssembler.generateStudentLessonKey(stuId));
+            lessonGateway.selectLesson(new LessonMO(key, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
         }, () -> { throw new BizException("找不到当前课程、请联系教务处处理"); });
     }
 
@@ -117,9 +130,6 @@ public class LessonApplicationService {
         if (!redisGateway.exists(key)) {
             throw new BizException("非法的课程id");
         }
-        // todo:这个操作用MQ，学生成功退课后应该刷新学生个人课程信息缓存
-        lessonGateway.dropLesson(lessonId, stuId);
-        redisGateway.incr(key);
-        redisGateway.remove(LessonAssembler.generateStudentLessonKey(stuId));
+        lessonGateway.dropLesson(new LessonMO(key, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
     }
 }

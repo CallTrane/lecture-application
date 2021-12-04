@@ -4,14 +4,14 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://112.74.126.4:3306/test
-    url: jdbc:mysql://127.0.0.1:3306/test
+    url: jdbc:mysql://112.74.126.4:3306/test
+#    url: jdbc:mysql://127.0.0.1:3306/test
     username: root
     password: root
 
   redis:
-#    host: 112.74.126.4
-    host: 127.0.0.1
+    host: 112.74.126.4
+#    host: 127.0.0.1
     port: 6379
     lettuce:
       pool:
@@ -20,6 +20,18 @@ spring:
         max-idle: 400
         min-idle: 20
         time-between-eviction-runs: 1s
+
+  rabbitmq:
+    host: 112.74.126.4
+#    host: 127.0.0.1
+    port: 5672
+    username: admin
+    password: admin
+    # 确认消息发送到交换机上
+    publisher-confirm-type: correlated
+    # 确认消息已发送到队列
+    publisher-returns: true
+
 
 #Redis自定义缓存时间配置，单位为秒
 caching:
