@@ -49,7 +49,6 @@ public class LessonApplicationService {
         String lessonKey = LessonAssembler.generateLessonListKey(lessonQuery);
         Integer index = Optional.ofNullable(lessonQuery.getPageIndex()).orElse(1);
         Integer size = Optional.ofNullable(lessonQuery.getPageSize()).orElse(10);
-
         List<LessonDO> result = Optional.ofNullable(redisGateway.getList(lessonKey, LessonDO.class)).orElseGet(() -> {
             List<LessonDO> value = lessonGateway.getLessonsByCondition(lessonQuery);
             redisGateway.set(lessonKey, value, 259200L);
@@ -57,14 +56,14 @@ public class LessonApplicationService {
         });
         return result.stream().filter(lessonDO ->
                 lessonDO.getMajorId().equals(lessonQuery.getMajorId()) & lessonDO.getCampusId().equals(lessonQuery.getCampusId()) &
-                StringUtils.contains(lessonDO.getTeacherName(), Optional.ofNullable(lessonQuery.getTeacherName()).orElse("")) &
+                        StringUtils.contains(lessonDO.getTeacherName(), Optional.ofNullable(lessonQuery.getTeacherName()).orElse("")) &
                         StringUtils.contains(lessonDO.getName(), Optional.ofNullable(lessonQuery.getLessonName()).orElse("")) &
                         (lessonQuery.getWeekday() == null || Objects.equals(lessonQuery.getWeekday(), lessonDO.getWeekday())) &
                         (lessonQuery.getRequired() == null || Objects.equals(lessonQuery.getRequired(), lessonDO.getRequired()))
         ).map(l -> {
             Optional.ofNullable(redisGateway.get(LessonAssembler.generateLessonNumberKey(l.getLId()))).ifPresent(n -> l.setRemainPeople((Integer) n));
             return l;
-        }).collect(Collectors.toList()).subList((index - 1) * index, index * size);
+        }).collect(Collectors.toList()).subList((index - 1) * size, Math.min(index * size - 1, result.size() - 1));
     }
 
     /**
@@ -112,15 +111,17 @@ public class LessonApplicationService {
      */
     public void selectLesson(Integer lessonId, Long stuId) {
         String key = LessonAssembler.generateLessonNumberKey(lessonId);
-        Optional.ofNullable((Integer)redisGateway.get(key)).ifPresentOrElse(number -> {
+        Optional.ofNullable((Integer) redisGateway.get(key)).ifPresentOrElse(number -> {
             if (number <= 0) {
                 throw new BizException("选课人数已满、请重新选择");
             }
-            if (getLessonsByStuId(stuId).stream().anyMatch(sl -> sl.getLId().equals(lessonId))){
+            if (getLessonsByStuId(stuId).stream().anyMatch(sl -> sl.getLId().equals(lessonId))) {
                 throw new BizException("该学生已选过该课程");
             }
             lessonGateway.selectLesson(new LessonMO(key, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
-        }, () -> { throw new BizException("找不到当前课程、请联系教务处处理"); });
+        }, () -> {
+            throw new BizException("找不到当前课程、请联系教务处处理");
+        });
     }
 
     /**
