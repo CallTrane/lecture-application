@@ -4,21 +4,21 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://112.74.126.4:3306/test
-#    url: jdbc:mysql://127.0.0.1:3306/test
+#    url: jdbc:mysql://112.74.126.4:3306/test
+    url: jdbc:mysql://127.0.0.1:3306/test
     username: root
     password: root
 
   redis:
-    host: 112.74.126.4
-#    host: 127.0.0.1
+#    host: 112.74.126.4
+    host: 127.0.0.1
     port: 6379
     lettuce:
       pool:
-        max-active: 8
-        max-wait: 5s
-        max-idle: 4
-        min-idle: 0
+        max-active: 2000
+        max-wait: 3000ms
+        max-idle: 400
+        min-idle: 20
         time-between-eviction-runs: 1s
 
 #Redis自定义缓存时间配置，单位为秒

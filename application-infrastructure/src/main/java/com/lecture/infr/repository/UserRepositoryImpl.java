@@ -85,6 +85,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void saveUserInRedis(String userKey, UserAggregate userAggregate) {
-        redisGateway.set(userKey, userAggregate);
+        redisGateway.set(userKey, userAggregate, 86200L);
     }
 }

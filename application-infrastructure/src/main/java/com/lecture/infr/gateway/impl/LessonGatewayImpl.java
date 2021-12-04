@@ -88,7 +88,6 @@ public class LessonGatewayImpl implements LessonGateway {
         return lessonDAO.selectBatchIds(lessonIds);
     }
 
-    // todo: 选课和退课需要刷新缓存
     @Override
     public void selectLesson(Integer lessonId, Long stuId) {
         lessonDAO.selectLesson(lessonId, stuId);

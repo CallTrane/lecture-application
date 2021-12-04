@@ -20,6 +20,13 @@ public interface RedisGateway {
     void remove(String... keys);
 
     /**
+     * 删除前缀的所有key
+     *
+     * @param prefixKeys
+     */
+    void removeKeyByPrefix(String prefixKeys);
+
+    /**
      * 批量删除key
      *
      * @param pattern

@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @className: RedisGatewayImpl
@@ -28,9 +29,19 @@ import java.util.concurrent.TimeUnit;
 public class RedisGatewayImpl implements RedisGateway {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    RedisTemplate redisTemplate;
 
     private static ObjectMapper mapper = new ObjectMapper();
+
+    /**
+     * 删除前缀的所有key
+     *
+     * @param prefixKey
+     */
+    @Override
+    public void removeKeyByPrefix(String prefixKey) {
+        redisTemplate.delete(redisTemplate.keys(prefixKey + "*"));
+    }
 
     /**
      * 写入缓存

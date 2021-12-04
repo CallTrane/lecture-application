@@ -3,8 +3,6 @@ package com.lecture.app.assembler;
 import com.lecture.component.utils.DataUtils;
 import com.lecture.infr.query.LessonQuery;
 
-import javax.xml.crypto.Data;
-
 /**
  * @className: LessonAssembler
  * @description: TODO
@@ -12,8 +10,11 @@ import javax.xml.crypto.Data;
  * @date: 2021/12/3 1:03
  */
 public class LessonAssembler {
+
+    public static final String LESSON_PREFIX_KEY = "lesson:";
+
     public static String generateLessonListKey(LessonQuery lessonQuery) {
-        String key = "lesson:";
+        String key = LESSON_PREFIX_KEY;
         Integer majorId = lessonQuery.getMajorId();
         Integer campusId = lessonQuery.getCampusId();
         Integer required = lessonQuery.getRequired();
@@ -30,15 +31,18 @@ public class LessonAssembler {
     }
 
     public static String generateStudentLessonKey(Long stuId) {
-        return "student_lesson:" + stuId;
+        String key = LESSON_PREFIX_KEY + "student_lesson";
+        return key + stuId;
     }
 
     public static String generateLessonNumberKey(Integer lessonId) {
-        return "number_of_lesson:" + lessonId;
+        String key = LESSON_PREFIX_KEY + "lesson_remain";
+        return key + lessonId;
     }
 
     public static String generateLessonKey(Integer lessonId) {
-        return "lesson:" + lessonId;
+        String key = LESSON_PREFIX_KEY + "id";
+        return key + lessonId;
     }
 
 }

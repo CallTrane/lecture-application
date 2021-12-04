@@ -31,7 +31,7 @@ public class UserAggregate {
 
     private static UserRepository userRepository = BeanUtils.getBean(UserRepository.class);
 
-    private static final String USER_KEY = "user";
+    private static final String USER_KEY = "user:";
 
     private UserTypeEnum userTypeEnum;
 
