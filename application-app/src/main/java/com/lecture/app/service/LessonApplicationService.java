@@ -52,7 +52,8 @@ public class LessonApplicationService {
         Integer index = Optional.ofNullable(lessonQuery.getPageIndex()).orElse(1);
         Integer size = Optional.ofNullable(lessonQuery.getPageSize()).orElse(10);
         List<LessonDO> origin = Optional.ofNullable(redisGateway.getList(lessonKey, LessonDO.class)).orElseGet(() -> {
-            List<LessonDO> value = lessonGateway.getLessonsByCondition(lessonQuery);
+            // todo:这里是查全部数据，应该改成根据条件查询 lessonGateway.getLessonsByCondition(lessonQuery) 但key就要生成保证能唯一的
+            List<LessonDO> value = lessonGateway.getAllLesson();
             redisGateway.set(lessonKey, value, 259200L);
             return value;
         });
