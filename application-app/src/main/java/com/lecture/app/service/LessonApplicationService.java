@@ -8,12 +8,11 @@ import com.lecture.infr.query.LessonQuery;
 import com.lecture.domain.entities.LessonDO;
 import com.lecture.infr.gateway.LessonGateway;
 import com.lecture.infr.gateway.RedisGateway;
-import org.apache.commons.collections4.ListUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,6 +25,7 @@ import java.util.stream.Collectors;
  * @author: carl
  * @date: 2021/11/16 0:14
  */
+@Slf4j
 @Service
 public class LessonApplicationService {
 
@@ -114,18 +114,24 @@ public class LessonApplicationService {
      * @param stuId
      */
     public void selectLesson(Integer lessonId, Long stuId) {
-        String key = LessonAssembler.generateLessonNumberKey(lessonId);
-        Optional.ofNullable((Integer) redisGateway.get(key)).ifPresentOrElse(number -> {
+        String lessonKey = LessonAssembler.generateLessonNumberKey(lessonId);
+        Optional.ofNullable((Integer) redisGateway.get(lessonKey)).ifPresentOrElse(number -> {
             if (number <= 0) {
                 throw new BizException("选课人数已满、请重新选择");
             }
             if (getLessonsByStuId(stuId).stream().anyMatch(sl -> sl.getLId().equals(lessonId))) {
                 throw new BizException("该学生已选过该课程");
             }
-            lessonGateway.selectLesson(new LessonMO(key, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
-        }, () -> {
-            throw new BizException("找不到当前课程、请联系教务处处理");
-        });
+            try {
+                // 提交让消息队列执执行
+                lessonGateway.selectLesson(new LessonMO(lessonKey, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
+            } catch (Exception e) {
+                log.error("学生选课失败 stuId:{} lessonId:{}", stuId, lessonId);
+                throw e;
+            }
+            // 成功发送后，让redis实现预减
+            redisGateway.decr(lessonKey);
+        }, () -> new BizException("找不到当前课程、请联系教务处处理"));
     }
 
     /**
@@ -135,11 +141,20 @@ public class LessonApplicationService {
      * @param stuId
      */
     public void dropLesson(Integer lessonId, Long stuId) {
-        String key = LessonAssembler.generateLessonNumberKey(lessonId);
-        if (!redisGateway.exists(key)) {
+        String lessonKey = LessonAssembler.generateLessonNumberKey(lessonId);
+        if (!redisGateway.exists(lessonKey)) {
             throw new BizException("非法的课程id");
         }
-        lessonGateway.dropLesson(new LessonMO(key, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
+        if (!getLessonsByStuId(stuId).stream().map(LessonDO::getLId).anyMatch(id -> id.equals(lessonId))) {
+            throw new BizException("该学生为选过这门课程");
+        }
+        try {
+            lessonGateway.dropLesson(new LessonMO(lessonKey, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
+        } catch (Exception e) {
+            log.error("学生退课失败 stuId:{} lessonId:{}", stuId, lessonId);
+        }
+        // redis加回去
+        redisGateway.incr(lessonKey);
     }
 
     public void closeLesson() {
