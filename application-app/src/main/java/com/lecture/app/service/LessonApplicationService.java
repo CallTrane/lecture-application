@@ -2,6 +2,7 @@ package com.lecture.app.service;
 
 import com.lecture.app.assembler.LessonAssembler;
 import com.lecture.component.exception.BizException;
+import com.lecture.component.utils.DataUtils;
 import com.lecture.infr.gateway.SystemGateway;
 import com.lecture.infr.gateway.rabbitmq.mo.LessonMO;
 import com.lecture.infr.query.LessonQuery;
@@ -49,25 +50,30 @@ public class LessonApplicationService {
      */
     public List<LessonDO> queryLessons(LessonQuery lessonQuery) {
         String lessonKey = LessonAssembler.generateLessonListKey(lessonQuery);
-        Integer index = Optional.ofNullable(lessonQuery.getPageIndex()).orElse(1);
+        Integer originIndex = lessonQuery.getPageIndex();
+        Integer index = DataUtils.isEmpty(originIndex) | originIndex <= 0 ? 1 : originIndex;
         Integer size = Optional.ofNullable(lessonQuery.getPageSize()).orElse(10);
+        Integer filter = Optional.ofNullable(lessonQuery.getFilter()).orElse(0);
         List<LessonDO> origin = Optional.ofNullable(redisGateway.getList(lessonKey, LessonDO.class)).orElseGet(() -> {
             // todo:这里是查全部数据，应该改成根据条件查询 lessonGateway.getLessonsByCondition(lessonQuery) 但key就要生成保证能唯一的
             List<LessonDO> value = lessonGateway.getAllLesson().stream().filter(l -> l.getClosed().equals(0)).collect(Collectors.toList());
             redisGateway.set(lessonKey, value, 259200L);
             return value;
         });
-        return origin.stream().filter(lessonDO ->
+        return origin.stream()
+                .map(l -> {
+                    Optional.ofNullable(redisGateway.get(LessonAssembler.generateLessonNumberKey(l.getLId()))).ifPresent(n -> l.setRemainPeople((Integer) n));
+                    return l;
+                })
+                .filter(lessonDO ->
                         StringUtils.contains(lessonDO.getTeacherName(), Optional.ofNullable(lessonQuery.getTeacherName()).orElse("")) &
                         StringUtils.contains(lessonDO.getName(), Optional.ofNullable(lessonQuery.getLessonName()).orElse("")) &
                         (lessonQuery.getWeekday() == null || Objects.equals(lessonQuery.getWeekday(), lessonDO.getWeekday())) &
                         (lessonQuery.getMajorId() == null || Objects.equals(lessonQuery.getMajorId(), lessonDO.getMajorId())) &
                         (lessonQuery.getCampusId() == null || Objects.equals(lessonQuery.getCampusId(), lessonDO.getCampusId())) &
-                        (lessonQuery.getRequired() == null || Objects.equals(lessonQuery.getRequired(), lessonDO.getRequired()))
-        ).map(l -> {
-            Optional.ofNullable(redisGateway.get(LessonAssembler.generateLessonNumberKey(l.getLId()))).ifPresent(n -> l.setRemainPeople((Integer) n));
-            return l;
-        }).skip((index - 1) * size).limit(size).collect(Collectors.toList());
+                        (lessonQuery.getRequired() == null || Objects.equals(lessonQuery.getRequired(), lessonDO.getRequired())) &
+                        (filter == 1 ? lessonDO.getRemainPeople() > 0 : true))
+                .skip((index - 1) * size).limit(size).collect(Collectors.toList());
     }
 
     /**

@@ -57,4 +57,10 @@ public class LessonQuery extends BaseQuery {
      * 每页大小
      */
     private Integer pageSize;
+
+    /**
+     * 是否过滤已满
+     *  0未不是，1过滤
+     */
+    private Integer filter;
 }
