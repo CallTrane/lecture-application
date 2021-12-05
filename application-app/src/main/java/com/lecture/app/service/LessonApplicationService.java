@@ -103,7 +103,7 @@ public class LessonApplicationService {
      * 清除redis所有key，同时将所有课程信息剩余人数预热到redis缓存中
      */
     public void preheatLessonNumber() {
-        systemGateway.preheatLessonNumber(LessonAssembler.generateLessonNumberKey(null));
+        systemGateway.preheatLessonNumber("lesson:lesson_remain:");
     }
 
     /**

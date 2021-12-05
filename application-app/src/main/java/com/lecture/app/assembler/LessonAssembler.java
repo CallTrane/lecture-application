@@ -1,6 +1,5 @@
 package com.lecture.app.assembler;
 
-import com.lecture.component.utils.DataUtils;
 import com.lecture.infr.query.LessonQuery;
 
 /**

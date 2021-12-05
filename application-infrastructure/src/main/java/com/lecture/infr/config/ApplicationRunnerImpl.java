@@ -29,6 +29,6 @@ public class ApplicationRunnerImpl  implements ApplicationRunner {
         UserAggregate.collegeMajorMap = systemGateway.getCollegeMajorMap();
         LessonAggregate.allLessonsCount = lessonGateway.getLessonCount();
         //LessonAggregate.allLessons = lessonGateway.getAllLessons();
-        systemGateway.preheatLessonNumber("lesson:id:");
+        systemGateway.preheatLessonNumber("lesson:lesson_remain:");
     }
 }
