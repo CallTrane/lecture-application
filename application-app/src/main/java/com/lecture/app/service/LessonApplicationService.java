@@ -53,7 +53,7 @@ public class LessonApplicationService {
         Integer size = Optional.ofNullable(lessonQuery.getPageSize()).orElse(10);
         List<LessonDO> origin = Optional.ofNullable(redisGateway.getList(lessonKey, LessonDO.class)).orElseGet(() -> {
             // todo:这里是查全部数据，应该改成根据条件查询 lessonGateway.getLessonsByCondition(lessonQuery) 但key就要生成保证能唯一的
-            List<LessonDO> value = lessonGateway.getAllLesson();
+            List<LessonDO> value = lessonGateway.getAllLesson().stream().filter(l -> l.getClosed().equals(0)).collect(Collectors.toList());
             redisGateway.set(lessonKey, value, 259200L);
             return value;
         });
@@ -126,12 +126,12 @@ public class LessonApplicationService {
                 // 提交让消息队列执执行
                 lessonGateway.selectLesson(new LessonMO(lessonKey, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
             } catch (Exception e) {
-                log.error("学生选课失败 stuId:{} lessonId:{}", stuId, lessonId);
+                log.error("学生选课失败 stuId: {} lessonId: {}", stuId, lessonId);
                 throw e;
             }
             // 成功发送后，让redis实现预减
             redisGateway.decr(lessonKey);
-        }, () -> new BizException("找不到当前课程、请联系教务处处理"));
+        }, () -> { throw new BizException("找不到当前课程、请联系教务处处理"); });
     }
 
     /**
@@ -146,12 +146,12 @@ public class LessonApplicationService {
             throw new BizException("非法的课程id");
         }
         if (!getLessonsByStuId(stuId).stream().map(LessonDO::getLId).anyMatch(id -> id.equals(lessonId))) {
-            throw new BizException("该学生为选过这门课程");
+            throw new BizException("你没有选过这门课程");
         }
         try {
             lessonGateway.dropLesson(new LessonMO(lessonKey, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
         } catch (Exception e) {
-            log.error("学生退课失败 stuId:{} lessonId:{}", stuId, lessonId);
+            log.error("学生退课失败 stuId: {} lessonId: {}", stuId, lessonId);
         }
         // redis加回去
         redisGateway.incr(lessonKey);

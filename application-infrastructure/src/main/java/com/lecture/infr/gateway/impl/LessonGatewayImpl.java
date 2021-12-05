@@ -10,6 +10,7 @@ import com.lecture.infr.gateway.RedisGateway;
 import com.lecture.infr.gateway.rabbitmq.mo.LessonMO;
 import com.lecture.infr.query.LessonQuery;
 import com.lecture.infr.gateway.rabbitmq.RabbitMQSender;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
  * @author: Carl Tong
  * @date: 2021/12/2 14:26
  */
+@Slf4j
 @Service
 public class LessonGatewayImpl implements LessonGateway {
 
@@ -94,13 +96,13 @@ public class LessonGatewayImpl implements LessonGateway {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void closeLesson() {
-        lessonDAO.closeLesson();
-
-        LambdaQueryWrapper<LessonDO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(LessonDO::getClosed, 1);
-        lessonDAO.dropLessonByClose(lessonDAO.selectList(wrapper).stream().map(LessonDO::getLId).collect(Collectors.toList()));
+        // 获取所有课程人数小于20，且之前未关班的l_id
+        List<Integer> dropIds = getAllLesson().stream()
+                .filter(lessonDO -> lessonDO.getTotalPeople() - lessonDO.getRemainPeople() < 20 & lessonDO.getClosed().equals(0))
+                .map(LessonDO::getLId).collect(Collectors.toList());
+        lessonDAO.closeLessons(dropIds);
         LessonAggregate.allLessonsCount = getLessonCount();
-
         redisGateway.removeKeyByPrefix("lesson:");
+        dropIds.parallelStream().forEach(id -> log.warn("系统关闭课程 l_id: {}", id));
     }
 }

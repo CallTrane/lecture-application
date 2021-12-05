@@ -86,4 +86,15 @@
         </if>
     </update>
 
+    <update id="closeLessons">
+        UPDATE lesson
+        SET closed = 1
+        <if test="list != null and list.size() > 0">
+            where l_id in
+            <foreach collection="list" open="(" close=")" item="id" separator=",">
+                #{id}
+            </foreach>
+        </if>
+    </update>
+
 </mapper>

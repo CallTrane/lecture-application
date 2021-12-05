@@ -29,11 +29,11 @@ public class RedisTest extends StartApplicationTest {
 
     @Test
     public void test() {
-        String key = "user:6";
+        String key = "user:8";
         UserAggregate value = service.login("lizhendong", "lizhendong");
-        redisGateway.set(key, value);
+        redisGateway.set(key, value, 16156L);
         // =============================================
-        UserAggregate user = (UserAggregate) redisGateway.get("user:10");
+        UserAggregate user = redisGateway.get("user:8");
         System.out.println(user.toString());
     }
 

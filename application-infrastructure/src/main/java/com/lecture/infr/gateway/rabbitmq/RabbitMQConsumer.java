@@ -37,14 +37,14 @@ public class RabbitMQConsumer {
             lessonDAO.selectLesson(lessonId, stuId);
             lessonDAO.decrLesson(lessonId);
         } catch (Exception e) {
-            log.error("学生选课失败 stuId:{} lessonId:{}", stuId, lessonId);
+            log.error("学生选课失败 stuId: {} lessonId: {}", stuId, lessonId);
             // 前面发送消息已经预减，失败了要重新加回去
             redisGateway.incr(lessonMO.getLessonKey());
             throw e;
         }
         // 成功消费就清空学生课表缓存
         redisGateway.remove(lessonMO.getStudentKey());
-        log.info("学生选课成功 stuId:{} lessonId:{}", stuId, lessonId);
+        log.info("学生选课成功 stuId: {} lessonId: {}", stuId, lessonId);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -58,9 +58,9 @@ public class RabbitMQConsumer {
             lessonDAO.incrLesson(lessonId);
         } catch (Exception e) {
             redisGateway.decr(lessonMO.getLessonKey());
-            log.error("学生退课失败 stuId:{} lessonId:{}", stuId, lessonId);
+            log.error("学生退课失败 stuId: {} lessonId: {}", stuId, lessonId);
         }
         redisGateway.remove(lessonMO.getStudentKey());
-        log.info("学生退课成功 stuId:{} lessonId:{}", stuId, lessonId);
+        log.info("学生退课成功 stuId: {} lessonId: {}", stuId, lessonId);
     }
 }
