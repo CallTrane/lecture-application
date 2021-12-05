@@ -4,14 +4,14 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://112.74.126.4:3306/test
-#    url: jdbc:mysql://127.0.0.1:3306/test
+#    url: jdbc:mysql://112.74.126.4:3306/test
+    url: jdbc:mysql://127.0.0.1:3306/test
     username: root
     password: root
 
   redis:
-    host: 112.74.126.4
-#    host: 127.0.0.1
+#    host: 112.74.126.4
+    host: 127.0.0.1
     port: 6379
     lettuce:
       pool:
@@ -22,8 +22,8 @@ spring:
         time-between-eviction-runs: 1s
 
   rabbitmq:
-    host: 112.74.126.4
-#    host: 127.0.0.1
+#    host: 112.74.126.4
+    host: 127.0.0.1
     port: 5672
     username: admin
     password: admin
