@@ -50,7 +50,7 @@ public class UserAggregate {
     }
 
     public UserAggregate userLogin(String account, String password) {
-        String userKey = USER_KEY + account;
+        String userKey = USER_KEY + account + password;
         return Optional.ofNullable(userRepository.getUserByRedis(userKey)).orElseGet(() -> {
             this.userDO = userRepository.userLogin(account, password);
             if (Objects.equals((this.userTypeEnum = UserTypeEnum.parse(userDO.getType())), UserTypeEnum.STUDENT)) {
