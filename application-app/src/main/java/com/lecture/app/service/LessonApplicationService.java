@@ -122,23 +122,26 @@ public class LessonApplicationService {
      * @param stuId
      */
     public void selectLesson(Integer lessonId, Long stuId) {
-        String lessonKey = LessonAssembler.generateLessonNumberKey(lessonId);
-        Optional.ofNullable((Integer) redisGateway.get(lessonKey)).ifPresentOrElse(number -> {
+        String lessonNumberKey = LessonAssembler.generateLessonNumberKey(lessonId);
+        LessonDO lessonDO = redisGateway.get(LessonAssembler.generateLessonKey(lessonId));
+        // 这里Lesson在缓存的剩余人数是不准的，但没关系因为只要星期几的第几节课这个数据
+        Optional.ofNullable((Integer) redisGateway.get(lessonNumberKey)).ifPresentOrElse(number -> {
             if (number <= 0) {
-                throw new BizException("选课人数已满、请重新选择");
+                throw new BizException("选课人数已满 请重新选择");
             }
-            if (getLessonsByStuId(stuId).stream().anyMatch(sl -> sl.getLId().equals(lessonId))) {
-                throw new BizException("该学生已选过该课程");
+            if (getLessonsByStuId(stuId).stream().anyMatch(sl -> sl.getLId().equals(lessonId) |
+                    (sl.getWeekday().equals(lessonDO.getWeekday()) && sl.getClasses().equals(lessonDO.getClasses())))) {
+                throw new BizException("该学生已选过该课程或跟已选课程时间冲突");
             }
             try {
                 // 提交让消息队列执执行
-                lessonGateway.selectLesson(new LessonMO(lessonKey, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
+                lessonGateway.selectLesson(new LessonMO(lessonNumberKey, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
             } catch (Exception e) {
                 log.error("学生选课失败 stuId: {} lessonId: {}", stuId, lessonId);
                 throw e;
             }
             // 成功发送后，让redis实现预减
-            redisGateway.decr(lessonKey);
+            redisGateway.decr(lessonNumberKey);
         }, () -> { throw new BizException("找不到当前课程 请联系教务处处理"); });
     }
 
