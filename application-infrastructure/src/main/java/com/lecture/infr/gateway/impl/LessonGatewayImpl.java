@@ -84,6 +84,11 @@ public class LessonGatewayImpl implements LessonGateway {
     }
 
     @Override
+    public LessonDO getLessonById(Integer lessonId) {
+        return lessonDAO.selectById(lessonId);
+    }
+
+    @Override
     public void selectLesson(LessonMO lessonMO) {
         rabbitMQSender.sendSelectLessonMessage(lessonMO);
     }

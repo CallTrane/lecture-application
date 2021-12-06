@@ -151,7 +151,9 @@ public class LessonApplicationService {
     public void dropLesson(Integer lessonId, Long stuId) {
         String lessonKey = LessonAssembler.generateLessonNumberKey(lessonId);
         if (!redisGateway.exists(lessonKey)) {
-            throw new BizException("非法的课程id");
+            Optional.ofNullable(lessonGateway.getLessonById(lessonId)).ifPresentOrElse(lessonDO -> {
+                redisGateway.set(lessonKey, lessonDO.getRemainPeople(), 259200L);
+            },() -> { throw new BizException("非法的课程id 请联系教务处处理"); });
         }
         if (!getLessonsByStuId(stuId).stream().map(LessonDO::getLId).anyMatch(id -> id.equals(lessonId))) {
             throw new BizException("你没有选过这门课程");

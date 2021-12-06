@@ -47,6 +47,14 @@ public interface LessonGateway {
     List<LessonDO> getLessonsByTeacherId(Long teacherId);
 
     /**
+     * 根据课程id获取
+     *
+     * @param lessonId
+     * @return
+     */
+    LessonDO getLessonById(Integer lessonId);
+
+    /**
      * 学生选课
      */
     void selectLesson(LessonMO lessonMO);
