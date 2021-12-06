@@ -1,13 +1,12 @@
 package com.lecture.app.controller;
 
+import com.lecture.app.vo.LessonVO;
 import com.lecture.domain.aggregates.lesson.LessonAggregate;
 import com.lecture.infr.query.LessonQuery;
 import com.lecture.app.service.LessonApplicationService;
-import com.lecture.domain.entities.LessonDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 /**
  * @className: LessonController
@@ -30,7 +29,7 @@ public class LessonController {
      */
     @PostMapping("/list")
     @ResponseBody
-    public List<LessonDO> getLessons(@RequestBody LessonQuery lessonQueryDTO) {
+    public LessonVO getLessons(@RequestBody LessonQuery lessonQueryDTO) {
         return lessonApplicationService.queryLessons(lessonQueryDTO);
     }
 

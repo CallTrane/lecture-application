@@ -23,7 +23,7 @@ public class LessonApplicationServiceTest extends StartApplicationTest {
         //lessonQuery.setCollegeId();
         //lessonQuery.setMajorId();
         //lessonQuery.setRequired();
-        applicationService.queryLessons(lessonQuery).forEach(System.out::println);
+        //applicationService.queryLessons(lessonQuery).forEach(System.out::println);
     }
 
     @Test
