@@ -139,7 +139,7 @@ public class LessonApplicationService {
             }
             // 成功发送后，让redis实现预减
             redisGateway.decr(lessonKey);
-        }, () -> { throw new BizException("找不到当前课程、请联系教务处处理"); });
+        }, () -> { throw new BizException("找不到当前课程 请联系教务处处理"); });
     }
 
     /**
@@ -151,9 +151,7 @@ public class LessonApplicationService {
     public void dropLesson(Integer lessonId, Long stuId) {
         String lessonKey = LessonAssembler.generateLessonNumberKey(lessonId);
         if (!redisGateway.exists(lessonKey)) {
-            Optional.ofNullable(lessonGateway.getLessonById(lessonId)).ifPresentOrElse(lessonDO -> {
-                redisGateway.set(lessonKey, lessonDO.getRemainPeople(), 259200L);
-            },() -> { throw new BizException("非法的课程id 请联系教务处处理"); });
+            throw new BizException("非法的课程id 请联系教务处处理");
         }
         if (!getLessonsByStuId(stuId).stream().map(LessonDO::getLId).anyMatch(id -> id.equals(lessonId))) {
             throw new BizException("你没有选过这门课程");
@@ -169,5 +167,6 @@ public class LessonApplicationService {
 
     public void closeLesson() {
         lessonGateway.closeLesson();
+        preheatLessonNumber();
     }
 }
