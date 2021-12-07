@@ -5,10 +5,10 @@
         <img src="~assets/img/avatar/avatar.jpg" alt="" />
       </div>
       <div class="Info">
-        <span style="margin: 10px 10px 10px 10px">用户: {{ userInfo.studentDO.name }}</span>
-        <span style="margin: 10px 10px 10px 10px">学号: {{ userInfo.studentDO.stuId }}</span>
-        <span style="margin: 10px 10px 10px 10px">学院: {{ userInfo.collegeMajorDO.collegeName }}</span>
-        <span style="margin: 10px 10px 10px 10px">专业: {{ userInfo.collegeMajorDO.majorName }}</span>
+        <span>用户: {{ userInfo.studentDO.name }}</span>
+        <span>学号: {{ userInfo.studentDO.stuId }}</span>
+        <span>学院: {{ userInfo.collegeMajorDO.collegeName }}</span>
+        <span>专业: {{ userInfo.collegeMajorDO.majorName }}</span>
       </div>
     </div>
     <div class="table">
@@ -258,35 +258,46 @@ export default {
 .userInfo {
   display: flex;
   flex-direction: row;
+  width: 500px;
+  margin-left: 100px;
 }
 .userInfo .Info {
   display: flex;
-  flex-direction: column;
-  font-size: 22px;
+  flex-wrap: wrap;
+  font-size: 16px;
 }
 .Info {
   margin-left: 50px;
 }
+
+.Info span {
+  margin: 10px;
+}
+
+.Info span:nth-child(even) {
+  margin-left: 25px;
+}
+
 .avatar img {
-  margin-top: 10px;
-  width: 210px;
-  height: 160px;
+  /* margin-top: 10px; */
+  width: 100px;
+  height: 80px;
   border-radius: 5%;
 }
 .table {
   font-size: 16px;
-  margin: 50px;
+  margin: 10px 10px;
 }
 .tableContent {
-  margin: 50px;
+  margin: 25px 50px;
   width: 90%;
 }
 .tableContent .column {
   background-color: #c7e1f5;
 }
 .tableContent th {
-  padding: 50px;
-  line-height: 20px;
+  padding: 20px;
+  line-height: 25px;
 }
 .column {
   white-space: nowrap;
