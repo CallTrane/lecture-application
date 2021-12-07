@@ -3,6 +3,7 @@ package com.lecture.infr.gateway.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lecture.domain.entities.CampusDO;
 import com.lecture.domain.entities.CollegeMajorDO;
+import com.lecture.domain.entities.LessonDO;
 import com.lecture.infr.dao.CampusDAO;
 import com.lecture.infr.dao.CollegeMajorDAO;
 import com.lecture.infr.gateway.LessonGateway;
@@ -11,6 +12,7 @@ import com.lecture.infr.gateway.SystemGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -60,10 +62,11 @@ public class SystemGatewayImpl implements SystemGateway {
     @Override
     public void preheatLessonNumber(String prefixKey) {
         redisGateway.removeKeyByPrefix("");
-        lessonGateway.getAllLesson().stream().filter(l -> l.getClosed().equals(0)).forEach(lessonDO -> {
-            // 过期时间是3天
-            redisGateway.set("lesson:id:" + lessonDO.getLId(), lessonDO, -1L);
-            redisGateway.set(prefixKey + lessonDO.getLId(), lessonDO.getRemainPeople(), -1L);
+        List<LessonDO> allLesson = lessonGateway.getAllLesson();
+        allLesson.stream().filter(l -> l.getClosed().equals(0)).forEach(lessonDO -> {
+            // 永不过期
+            redisGateway.set("lesson:id:" + lessonDO.getLId(), lessonDO);
+            redisGateway.set(prefixKey + lessonDO.getLId(), lessonDO.getRemainPeople());
         });
     }
 }

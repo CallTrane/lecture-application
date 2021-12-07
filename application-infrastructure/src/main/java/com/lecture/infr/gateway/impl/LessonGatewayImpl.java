@@ -1,7 +1,6 @@
 package com.lecture.infr.gateway.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lecture.component.utils.DataUtils;
 import com.lecture.domain.aggregates.lesson.LessonAggregate;
 import com.lecture.domain.entities.LessonDO;
