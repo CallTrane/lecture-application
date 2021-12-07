@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Entry from './childComp/Entry'
+import Entry from './Entry'
 
 export default {
   name: 'Login',

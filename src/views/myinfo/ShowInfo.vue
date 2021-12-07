@@ -3,6 +3,8 @@
     <el-card>
       <el-descriptions title="个人信息" :column="3" border>
         <el-descriptions-item label="姓名">{{myInfo.studentDO.name}}</el-descriptions-item>
+        <el-descriptions-item label="学号">{{myInfo.studentDO.stuId}}</el-descriptions-item>
+
         <el-descriptions-item label="学院">{{myInfo.collegeMajorDO.collegeName}}</el-descriptions-item>
         <el-descriptions-item label="专业">{{myInfo.collegeMajorDO.majorName}}</el-descriptions-item>
         <el-descriptions-item label="年级">{{myInfo.studentDO.enrollment}}</el-descriptions-item>
