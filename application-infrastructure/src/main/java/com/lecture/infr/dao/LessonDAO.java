@@ -35,4 +35,6 @@ public interface LessonDAO extends BaseMapper<LessonDO> {
     void closeLessons(@Param("list") List<Integer> dropIds);
 
     Integer getLessonCount();
+
+    void closeLessonByTeacher(Long teacherId, Integer lessonId);
 }

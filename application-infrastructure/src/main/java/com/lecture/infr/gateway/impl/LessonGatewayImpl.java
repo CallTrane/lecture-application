@@ -1,6 +1,7 @@
 package com.lecture.infr.gateway.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lecture.component.utils.DataUtils;
 import com.lecture.domain.aggregates.lesson.LessonAggregate;
 import com.lecture.domain.entities.LessonDO;
@@ -109,5 +110,10 @@ public class LessonGatewayImpl implements LessonGateway {
         LessonAggregate.allLessonsCount = getLessonCount();
         redisGateway.removeKeyByPrefix("lesson:");
         dropIds.parallelStream().forEach(id -> log.warn("系统关闭课程 l_id: {}", id));
+    }
+
+    @Override
+    public void closeLesson(Long teacherId, Integer lessonId) {
+        lessonDAO.closeLessonByTeacher(teacherId, lessonId);
     }
 }

@@ -62,8 +62,8 @@ public class SystemGatewayImpl implements SystemGateway {
         redisGateway.removeKeyByPrefix("");
         lessonGateway.getAllLesson().stream().filter(l -> l.getClosed().equals(0)).forEach(lessonDO -> {
             // 过期时间是3天
-            redisGateway.set("lesson:id:" + lessonDO.getLId(), lessonDO, 259200L);
-            redisGateway.set(prefixKey + lessonDO.getLId(), lessonDO.getRemainPeople(), 259200L);
+            redisGateway.set("lesson:id:" + lessonDO.getLId(), lessonDO, -1L);
+            redisGateway.set(prefixKey + lessonDO.getLId(), lessonDO.getRemainPeople(), -1L);
         });
     }
 }

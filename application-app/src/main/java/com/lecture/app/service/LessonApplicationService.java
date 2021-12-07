@@ -2,6 +2,7 @@ package com.lecture.app.service;
 
 import com.lecture.app.assembler.LessonAssembler;
 import com.lecture.app.vo.LessonVO;
+import com.lecture.component.enums.ActionEnum;
 import com.lecture.component.exception.BizException;
 import com.lecture.component.utils.DataUtils;
 import com.lecture.infr.gateway.SystemGateway;
@@ -171,5 +172,15 @@ public class LessonApplicationService {
     public void closeLesson() {
         lessonGateway.closeLesson();
         preheatLessonNumber();
+    }
+
+    public void closeLesson(Long teacherId, Integer lessonId) {
+        Optional.ofNullable((LessonDO) redisGateway.get(LessonAssembler.generateLessonKey(lessonId))).ifPresentOrElse(lessonDO -> {
+            if (!lessonDO.getTId().equals(teacherId)) {
+                throw new BizException("非法的教师工号 请联系教务处处理");
+            }
+            lessonGateway.closeLesson(teacherId, lessonId);
+            preheatLessonNumber();
+        }, () -> { throw new BizException("非法的课程id 请联系教务处处理"); });
     }
 }

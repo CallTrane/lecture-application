@@ -65,4 +65,12 @@ public interface LessonGateway {
     void dropLesson(LessonMO lessonMO);
 
     void closeLesson();
+
+    /**
+     * 教师关班
+     *
+     * @param teacherId 教师工号
+     * @param lessonId 课程id
+     */
+    void closeLesson(Long teacherId, Integer lessonId);
 }

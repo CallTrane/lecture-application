@@ -97,4 +97,10 @@
         </if>
     </update>
 
+    <update id="closeLessonByTeacher">
+        UPDATE lesson
+        SET closed = 1
+        WHERE l_id = #{lessonId} and t_id = #{teacherId}
+    </update>
+
 </mapper>
