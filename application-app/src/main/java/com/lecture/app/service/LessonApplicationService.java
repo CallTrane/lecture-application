@@ -5,6 +5,7 @@ import com.lecture.app.vo.LessonVO;
 import com.lecture.component.enums.ActionEnum;
 import com.lecture.component.exception.BizException;
 import com.lecture.component.utils.DataUtils;
+import com.lecture.domain.aggregates.lesson.LessonAggregate;
 import com.lecture.infr.gateway.SystemGateway;
 import com.lecture.infr.gateway.rabbitmq.mo.LessonMO;
 import com.lecture.infr.query.LessonQuery;
@@ -130,9 +131,13 @@ public class LessonApplicationService {
             if (number <= 0) {
                 throw new BizException("选课人数已满 请重新选择");
             }
-            if (getLessonsByStuId(stuId).stream().anyMatch(sl -> sl.getLId().equals(lessonId) |
+            List<LessonDO> studentLessons = getLessonsByStuId(stuId);
+            if (studentLessons.stream().anyMatch(sl -> sl.getLId().equals(lessonId) |
                     (sl.getWeekday().equals(lessonDO.getWeekday()) && sl.getClasses().equals(lessonDO.getClasses())))) {
                 throw new BizException("该学生已选过该课程或跟已选课程时间冲突");
+            }
+            if (studentLessons.stream().mapToInt(LessonDO::getCredit).sum() + lessonDO.getCredit() > LessonAggregate.MAX_CREDIT) {
+                throw new BizException("选课总学分不能大于35");
             }
             try {
                 // 提交让消息队列执执行
