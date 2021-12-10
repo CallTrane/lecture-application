@@ -25,11 +25,24 @@ public class TeacherController {
     @Autowired
     LessonApplicationService lessonApplicationService;
 
+    /**
+     * 获取老师所教课程
+     *
+     * @param teacherId
+     * @return
+     */
     @PostMapping("/get_lesson")
     public List<LessonDO> getLessonsByTeacherId(@RequestParam Long teacherId) {
         return lessonApplicationService.getLessonsByTeacherId(teacherId);
     }
 
+    /**
+     * 关班
+     *
+     * @param teacherId
+     * @param lessonId
+     * @return
+     */
     @PostMapping("/close_lesson")
     public ActionEnum closeLessonByTeacher(@Validated Long teacherId, @Validated Integer lessonId) {
         lessonApplicationService.closeLesson(teacherId, lessonId);

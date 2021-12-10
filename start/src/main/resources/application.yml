@@ -15,10 +15,10 @@ spring:
     port: 6379
     lettuce:
       pool:
-        max-active: 3000
+        max-active: 20000
         max-wait: 3000ms
-        max-idle: 500
-        min-idle: 20
+        max-idle: 5
+        min-idle: 1
         time-between-eviction-runs: 1s
 
   rabbitmq:
@@ -29,7 +29,7 @@ spring:
     password: admin
     listener:
       simple:
-        max-concurrency: 10
+        max-concurrency: 5
         concurrency: 1
     # 确认消息发送到交换机上
     publisher-confirm-type: correlated
@@ -56,11 +56,11 @@ server:
     include-exception: false
     include-message: always
   tomcat:
-    max-connections: 5000
-    accept-count: 50
+    max-connections: 25000
+    accept-count: 40
     threads:
-      max: 300
-      min-spare: 40
+      max: 10
+      min-spare: 2
 
 #
 logging:

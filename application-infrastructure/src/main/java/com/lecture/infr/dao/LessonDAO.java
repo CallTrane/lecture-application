@@ -2,6 +2,7 @@ package com.lecture.infr.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lecture.domain.entities.LessonDO;
+import com.lecture.domain.entities.StudentDO;
 import com.lecture.infr.query.LessonQuery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -37,4 +38,8 @@ public interface LessonDAO extends BaseMapper<LessonDO> {
     Integer getLessonCount();
 
     void closeLessonByTeacher(Long teacherId, Integer lessonId);
+
+    List<StudentDO> getStudentByLessonId(Long lessonId);
+
+    void closeStudentLessonByTeacher(Integer lessonId);
 }

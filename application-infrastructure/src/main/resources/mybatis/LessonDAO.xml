@@ -44,6 +44,16 @@
         where closed = 0
     </select>
 
+    <select id="getStudentByLessonId" resultType="com.lecture.domain.entities.StudentDO">
+        select stu_id, name
+        from student
+        where stu_id in (
+            select stu_id
+            from student_lesson
+            where l_id = #{lessonId} and delete_flag = 0
+        )
+    </select>
+
     <insert id="selectLesson">
         INSERT
         INTO student_lesson(stu_id,l_id)
@@ -101,6 +111,12 @@
         UPDATE lesson
         SET closed = 1
         WHERE l_id = #{lessonId} and t_id = #{teacherId}
+    </update>
+
+    <update id="closeStudentLessonByTeacher">
+        update student_lesson
+        set delete_flag = 1
+        where l_id = #{lessonId}
     </update>
 
 </mapper>

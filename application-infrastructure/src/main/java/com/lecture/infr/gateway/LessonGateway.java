@@ -1,6 +1,7 @@
 package com.lecture.infr.gateway;
 
 import com.lecture.domain.entities.LessonDO;
+import com.lecture.domain.entities.StudentDO;
 import com.lecture.infr.gateway.rabbitmq.mo.LessonMO;
 import com.lecture.infr.query.LessonQuery;
 
@@ -73,4 +74,6 @@ public interface LessonGateway {
      * @param lessonId 课程id
      */
     void closeLesson(Long teacherId, Integer lessonId);
+
+    List<StudentDO> getStudentByLessonId(Long lessonId);
 }

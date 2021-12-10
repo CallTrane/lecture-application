@@ -18,4 +18,6 @@ public class LessonMO implements Serializable {
     private Integer lessonId;
     private String studentKey;
     private Long stuId;
+    private String teacherKey;
+    private Long teacherId;
 }

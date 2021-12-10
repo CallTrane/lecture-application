@@ -6,6 +6,7 @@ import com.lecture.component.enums.ActionEnum;
 import com.lecture.component.exception.BizException;
 import com.lecture.component.utils.DataUtils;
 import com.lecture.domain.aggregates.lesson.LessonAggregate;
+import com.lecture.domain.entities.StudentDO;
 import com.lecture.infr.gateway.SystemGateway;
 import com.lecture.infr.gateway.rabbitmq.mo.LessonMO;
 import com.lecture.infr.query.LessonQuery;
@@ -103,11 +104,15 @@ public class LessonApplicationService {
      */
     public List<LessonDO> getLessonsByTeacherId(Long tId) {
         String key = LessonAssembler.genereteTeacherLessonKey(tId);
-        return Optional.ofNullable(redisGateway.getList(key, LessonDO.class)).orElseGet(() -> {
+        List<LessonDO> origin = Optional.ofNullable(redisGateway.getList(key, LessonDO.class)).orElseGet(() -> {
             List<LessonDO> result = lessonGateway.getLessonsByTeacherId(tId);
             redisGateway.set(key, result, 86400L);
             return result;
         });
+        return origin.stream().map(lessonDO -> {
+            lessonDO.setRemainPeople(redisGateway.get(LessonAssembler.generateLessonNumberKey(lessonDO.getLId())));
+            return lessonDO;
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -141,7 +146,9 @@ public class LessonApplicationService {
             }
             try {
                 // 提交让消息队列执执行
-                lessonGateway.selectLesson(new LessonMO(lessonNumberKey, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
+                lessonGateway.selectLesson(new LessonMO(lessonNumberKey, lessonId,
+                        LessonAssembler.generateStudentLessonKey(stuId), stuId,
+                        LessonAssembler.genereteTeacherLessonKey(lessonDO.getTId()), lessonDO.getTId()));
             } catch (Exception e) {
                 log.error("学生选课失败 stuId: {} lessonId: {}", stuId, lessonId);
                 throw e;
@@ -158,20 +165,23 @@ public class LessonApplicationService {
      * @param stuId
      */
     public void dropLesson(Integer lessonId, Long stuId) {
-        String lessonKey = LessonAssembler.generateLessonNumberKey(lessonId);
-        if (!redisGateway.exists(lessonKey)) {
+        String lessonNumberKey = LessonAssembler.generateLessonNumberKey(lessonId);
+        LessonDO lessonDO = redisGateway.get(LessonAssembler.generateLessonKey(lessonId));
+        if (!redisGateway.exists(lessonNumberKey)) {
             throw new BizException("非法的课程id 请联系教务处处理");
         }
         if (!getLessonsByStuId(stuId).stream().map(LessonDO::getLId).anyMatch(id -> id.equals(lessonId))) {
             throw new BizException("你没有选过这门课程");
         }
         try {
-            lessonGateway.dropLesson(new LessonMO(lessonKey, lessonId, LessonAssembler.generateStudentLessonKey(stuId), stuId));
+            lessonGateway.dropLesson(new LessonMO(lessonNumberKey, lessonId,
+                    LessonAssembler.generateStudentLessonKey(stuId), stuId,
+                    LessonAssembler.genereteTeacherLessonKey(lessonDO.getTId()), lessonDO.getTId()));
         } catch (Exception e) {
             log.error("学生退课失败 stuId: {} lessonId: {}", stuId, lessonId);
         }
         // redis加回去
-        redisGateway.incr(lessonKey);
+        redisGateway.incr(lessonNumberKey);
     }
 
     public void closeLesson() {
@@ -187,5 +197,9 @@ public class LessonApplicationService {
             lessonGateway.closeLesson(teacherId, lessonId);
             preheatLessonNumber();
         }, () -> { throw new BizException("非法的课程id 请联系教务处处理"); });
+    }
+
+    public List<StudentDO> getStudentByLessonId(Long lessonId) {
+        return lessonGateway.getStudentByLessonId(lessonId);
     }
 }

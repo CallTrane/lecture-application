@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lecture.component.utils.DataUtils;
 import com.lecture.domain.aggregates.lesson.LessonAggregate;
 import com.lecture.domain.entities.LessonDO;
+import com.lecture.domain.entities.StudentDO;
 import com.lecture.infr.dao.LessonDAO;
 import com.lecture.infr.gateway.LessonGateway;
 import com.lecture.infr.gateway.RedisGateway;
@@ -114,5 +115,11 @@ public class LessonGatewayImpl implements LessonGateway {
     @Override
     public void closeLesson(Long teacherId, Integer lessonId) {
         lessonDAO.closeLessonByTeacher(teacherId, lessonId);
+        lessonDAO.closeStudentLessonByTeacher(lessonId);
+    }
+
+    @Override
+    public List<StudentDO> getStudentByLessonId(Long lessonId) {
+        return lessonDAO.getStudentByLessonId(lessonId);
     }
 }

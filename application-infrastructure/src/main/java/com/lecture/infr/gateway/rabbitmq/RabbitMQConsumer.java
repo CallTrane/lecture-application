@@ -44,6 +44,7 @@ public class RabbitMQConsumer {
         }
         // 成功消费就清空学生课表缓存
         redisGateway.remove(lessonMO.getStudentKey());
+        redisGateway.remove(lessonMO.getTeacherKey());
         log.info("学生选课成功 stuId: {} lessonId: {}", stuId, lessonId);
     }
 
@@ -61,6 +62,7 @@ public class RabbitMQConsumer {
             log.error("学生退课失败 stuId: {} lessonId: {}", stuId, lessonId);
         }
         redisGateway.remove(lessonMO.getStudentKey());
+        redisGateway.remove(lessonMO.getTeacherKey());
         log.info("学生退课成功 stuId: {} lessonId: {}", stuId, lessonId);
     }
 }
