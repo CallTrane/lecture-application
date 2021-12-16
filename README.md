@@ -26,8 +26,8 @@
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/875959a5208d41458a94984b68679cbd.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5Zyo5a2m5Lmg6Lev5LiK55qE5bCP576k,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center)
 
 # 模块依赖
+![image](https://user-images.githubusercontent.com/57559093/146316519-0a37b27d-4f3c-49a4-8969-2d26e6c2ceb7.png)
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/542db55a6f4f469cb75018fef670c7ea.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5Zyo5a2m5Lmg6Lev5LiK55qE5bCP576k,size_19,color_FFFFFF,t_70,g_se,x_16#pic_center)
 
 # 业务流程
 
