@@ -19,7 +19,6 @@
         <!-- 点击折叠侧边栏 -->
         <div @click="toggleCollapse" class="toggle-button">|||</div>
 
-        <!-- unique-opened -->
         <el-menu :collapse="isCollapse" :collapse-transition="false" :router="true" :default-active="activePath" background-color="#333744" text-color="#fff" active-text-color="#06b799">
           <!-- 学生选课一级菜单 -->
           <el-submenu index="1">
@@ -72,7 +71,7 @@
 
       <!-- 主体 -->
       <el-main :class="{ marginTen: isCollapse }">
-        <keep-alive exclude="StuList">
+        <keep-alive exclude="Drop">
           <router-view></router-view>
         </keep-alive>
       </el-main>

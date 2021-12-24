@@ -112,8 +112,6 @@
           </template>
         </el-table-column>
 
-        <!-- <el-table-column prop="classes" label="教室" align="center"></el-table-column> -->
-
         <el-table-column label="必修/选修" align="center">
           <template slot-scope="scope">
             <span>{{scope.row.required?'必修':'选修'}}</span>
@@ -131,11 +129,9 @@
             <el-button @click="selectClick(scope.row.lid)" :disabled="isDisabled(scope.row.lid)" :plain="isDisabled(scope.row.lid)" :type="isDisabled(scope.row.lid)?'info':'primary'" size="small">{{isDisabled(scope.row.lid)?'已选':'选课'}}</el-button>
           </template>
         </el-table-column>
-
       </el-table>
 
       <!-- 分页区域 -->
-
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[5, 10, 20]" :page-size="searchRequestBody.pageSize" :current-page="searchRequestBody.pageIndex" :total="lessonTotal" layout="total, sizes, prev, pager, next, jumper" background>
       </el-pagination>
 
@@ -155,6 +151,7 @@ import {
 export default {
   inject: ['reload'],
   name: 'Selection',
+  components: {},
   data() {
     return {
       // 是否过滤已满
@@ -235,14 +232,12 @@ export default {
     this.getLessonSelected()
   },
 
-  // activated() {
-  //   console.log('activated')
-  // },
+  // activated() {},
   // destroyed() {
-  //   console.log('destroyed')
+  //   this.reload()
   // },
   deactivated() {
-    this.reload()
+    // this.reload()
   },
 
   methods: {

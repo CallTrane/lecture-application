@@ -27,8 +27,9 @@ import {
   DescriptionsItem,
   Tag,
   Pagination,
-  MessageBox
+  MessageBox,
 } from 'element-ui'
+
 
 Vue.use(Button)
 Vue.use(Form)

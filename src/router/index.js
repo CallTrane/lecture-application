@@ -14,13 +14,10 @@ const teacherClass = () => import('views/teacherClass/teacherClass')
 const StuList = () => import('views/teacherClass/StuList')
 
 
-
-
 const routes = [
   {
     path: '/',
     redirect: '/login',
-
   },
   {
     path: '/login',
@@ -89,7 +86,6 @@ const routes = [
           title: '个人课表'
         }
       },
-
       {
         path: 'myinfo',
         component: Myinfo,
@@ -97,17 +93,8 @@ const routes = [
           title: '个人信息'
         }
       },
-      {
-        path: 'timetable',
-        component: Timetable,
-        meta: {
-          title: '个人课表'
-        }
-      },
     ]
   },
-
-
 ]
 
 const router = new VueRouter({
@@ -127,7 +114,6 @@ router.beforeEach((to, from, next) => {
     document.title = '学生选课系统'
   }
   next()
-
 })
 
 
