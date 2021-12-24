@@ -71,7 +71,7 @@
 
       <!-- 主体 -->
       <el-main :class="{ marginTen: isCollapse }">
-        <keep-alive exclude="Drop">
+        <keep-alive exclude="Drop,Timetable">
           <router-view></router-view>
         </keep-alive>
       </el-main>
